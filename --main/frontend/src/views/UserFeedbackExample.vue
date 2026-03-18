@@ -415,103 +415,34 @@ const showInfoMessage = () => {
 }
 
 const showNotificationMessage = () => {
-  showNotification('系统通知', '您有一条新消息', 'info')
+  showNotification('系统通知', '您有一条新消息', 'info' as any)
 }
 </script>
 
 <style scoped>
-.user-feedback-example {
-  min-height: 100vh;
-  background-color: #f5f7fa;
-  padding: 20px;
-}
-
-.page-header {
-  margin-bottom: 30px;
-  padding: 30px;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-}
-
-.page-header h1 {
-  margin: 0 0 10px 0;
-  font-size: 28px;
-  color: #303133;
-}
-
-.page-header p {
-  margin: 0;
-  font-size: 14px;
-  color: #606266;
-}
-
-.examples-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-  gap: 20px;
-}
-
-.example-card {
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-}
-
-.example-card h3 {
-  margin: 0;
-  font-size: 18px;
-  color: #303133;
-}
-
-.button-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 16px;
-}
-
-.validation-errors {
-  margin-top: 20px;
-}
-
-.validation-errors ul {
-  margin: 10px 0 0 0;
-  padding-left: 20px;
-}
-
-.validation-errors li {
-  margin: 5px 0;
-  color: #f56c6c;
-}
-
-.progress-examples {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.loading-examples {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.loading-demo-area {
-  border: 2px dashed #dcdfe6;
-  border-radius: 8px;
-  padding: 20px;
-  background-color: #f5f7fa;
-}
-
-.demo-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-}
-
-.demo-content p {
-  margin: 10px 0;
-  color: #606266;
+@media (max-width: 768px) {
+  .user-feedback-example {
+    padding: 10px;
+  }
+  .page-header {
+    padding: 20px;
+  }
+  .page-header h1 {
+    font-size: 22px;
+  }
+  .examples-grid {
+    grid-template-columns: 1fr;
+  }
+  .button-group {
+    flex-direction: column;
+  }
+  .button-group .el-button, .button-group :deep(.action-button) {
+    width: 100%;
+    margin-left: 0 !important;
+  }
+  .loading-demo-area {
+    height: auto !important;
+    min-height: 150px;
+  }
 }
 </style>

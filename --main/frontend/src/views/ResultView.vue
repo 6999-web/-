@@ -175,6 +175,11 @@
                   {{ getIndicatorLabel(row.indicator) }}
                 </template>
               </el-table-column>
+                      <el-table-column label="总分" width="100">
+                        <template #default="s: any">
+                          <span class="score-highlight">{{ s.row.total?.toFixed(1) ?? '-' }} 分</span>
+                        </template>
+                      </el-table-column>
               <el-table-column
                 prop="score"
                 label="得分"
@@ -320,7 +325,7 @@ const formatDate = (dateStr?: string): string => {
 
 // Download file
 const downloadFile = (att: any) => {
-  const baseURL = import.meta.env.VITE_API_BASE_URL || '/api'
+  const baseURL = (import.meta as any).env.VITE_API_BASE_URL || '/api'
   const token = localStorage.getItem('token')
   const url = `${baseURL}/teaching-office/attachments/${att.id}/download`
   

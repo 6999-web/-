@@ -66,15 +66,26 @@ const negativeRows = [
 </script>
 
 <style scoped>
-.scoring-rules-page { min-height: 100vh; background: #f5f7fa; padding: 20px; }
-.page-header { margin-bottom: 20px; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
-.page-header h1 { margin: 0 0 8px 0; font-size: 24px; color: #303133; }
-.page-description { margin: 0; color: #606266; font-size: 14px; }
-.back-home-link { margin-left: 12px; color: #409eff; text-decoration: none; }
-.back-home-link:hover { text-decoration: underline; }
-.rules-card { max-width: 1100px; margin: 0 auto; }
-.rules-content h2 { margin: 0 0 16px 0; font-size: 18px; color: #303133; }
-.rules-content h3 { margin: 24px 0 12px 0; font-size: 16px; color: #409eff; }
-.intro { margin: 0 0 16px 0; color: #606266; font-size: 14px; }
-.rules-table { margin-bottom: 20px; }
+@media (max-width: 768px) {
+  .scoring-rules-page {
+    padding: 10px;
+  }
+  .page-header {
+    padding: 15px;
+  }
+  .page-header h1 {
+    font-size: 20px;
+  }
+  .page-description {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .back-home-link {
+    margin-left: 0;
+  }
+  :deep(.el-table) {
+    font-size: 12px;
+  }
+}
 </style>

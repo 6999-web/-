@@ -1379,9 +1379,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted, onUnmounted, type Ref } from 'vue'
-import { UploadFilled, Upload, Document, Delete, Plus, Check, Loading } from '@element-plus/icons-vue'
-import { ElMessage, ElMessageBox, type FormInstance, type FormRules, type UploadInstance, type UploadUserFile } from 'element-plus'
+import { ref, reactive, onMounted, onUnmounted, type Ref } from 'vue'
+import { Upload, Document, Delete } from '@element-plus/icons-vue'
+import { ElMessage, type FormInstance, type FormRules, type UploadUserFile, type UploadInstance } from 'element-plus'
 import apiClient from '@/api/client'
 
 const isMobile = ref(false)
@@ -2036,7 +2036,7 @@ function handleInlineFileRemove(file: UploadUserFile, fieldKey: string) {
   }
 
   if (fileListRef) {
-    const index = fileListRef.value.findIndex(f => f.uid === file.uid)
+    const index = fileListRef.value.findIndex((f: any) => f.uid === file.uid)
     if (index > -1) {
       fileListRef.value.splice(index, 1)
       ElMessage.info(`已移除文件: ${file.name}`)
@@ -2100,7 +2100,7 @@ const uploadAttachments = async (evaluationId: string): Promise<boolean> => {
   ]
   if (allAttachments.length === 0) return true
 
-  const baseURL = import.meta.env.VITE_API_BASE_URL || '/api'
+  const baseURL = (import.meta as any).env.VITE_API_BASE_URL || '/api'
   const token = localStorage.getItem('token')
   let successCount = 0
   let failCount = 0
@@ -2134,9 +2134,6 @@ const handleSubmit = async () => {
     // 验证表单
     await formRef.value.validate()
     
-    // 标记为提交中
-    isSubmitting.value = true
-    
     // 合并所有内联上传的附件
     const allAttachments = [
       ...teachingProcessFiles.value,
@@ -2164,8 +2161,7 @@ const handleSubmit = async () => {
       uploadAttachments
     })
     
-    // 标记为已提交
-    isSubmitted.value = true
+    isSubmitting.value = false
     
   } catch (error: any) {
     console.error('Submit failed:', error)
@@ -2501,6 +2497,30 @@ defineExpose({
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 16px;
+  }
+  .card-header h2 {
+    font-size: 18px;
+  }
+  .content-with-attachment {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .score-input-row {
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  .el-divider__text {
+    font-size: 14px;
+    padding: 0 5px;
+  }
+  .summary-card :deep(.el-descriptions__cell) {
+    display: block;
+  }
 }
 
 .deduction-display {

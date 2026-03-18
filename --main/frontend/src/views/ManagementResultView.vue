@@ -97,7 +97,8 @@
           class="statistics-overview"
         >
           <el-row :gutter="20">
-            <el-col :span="6">
+          <el-row :gutter="20">
+            <el-col :xs="24" :sm="12" :md="6">
               <div class="stat-card">
                 <div
                   class="stat-icon"
@@ -115,7 +116,7 @@
                 </div>
               </div>
             </el-col>
-            <el-col :span="6">
+            <el-col :xs="24" :sm="12" :md="6">
               <div class="stat-card">
                 <div
                   class="stat-icon"
@@ -133,7 +134,7 @@
                 </div>
               </div>
             </el-col>
-            <el-col :span="6">
+            <el-col :xs="24" :sm="12" :md="6">
               <div class="stat-card">
                 <div
                   class="stat-icon"
@@ -151,7 +152,7 @@
                 </div>
               </div>
             </el-col>
-            <el-col :span="6">
+            <el-col :xs="24" :sm="12" :md="6">
               <div class="stat-card">
                 <div
                   class="stat-icon"
@@ -169,6 +170,7 @@
                 </div>
               </div>
             </el-col>
+          </el-row>
           </el-row>
         </div>
 
@@ -427,7 +429,6 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import {
   Search,
@@ -459,7 +460,7 @@ interface ManagementResult {
 }
 
 // Router
-const router = useRouter()
+// const router = useRouter()
 
 // State
 const loading = ref(false)
@@ -493,21 +494,21 @@ const sortConfig = ref({
 
 // Computed: Statistics
 const publishedCount = computed(() => {
-  return results.value.filter(r => r.status === 'published').length
+  return results.value.filter((r: any) => r.status === 'published').length
 })
 
 const averageScore = computed(() => {
   const scores = results.value
-    .filter(r => r.final_score !== undefined)
-    .map(r => r.final_score!)
+    .filter((r: any) => r.final_score !== undefined)
+    .map((r: any) => r.final_score!)
   if (scores.length === 0) return 0
-  return scores.reduce((sum, score) => sum + score, 0) / scores.length
+  return scores.reduce((sum: number, score: number) => sum + score, 0) / scores.length
 })
 
 const highestScore = computed(() => {
   const scores = results.value
-    .filter(r => r.final_score !== undefined)
-    .map(r => r.final_score!)
+    .filter((r: any) => r.final_score !== undefined)
+    .map((r: any) => r.final_score!)
   if (scores.length === 0) return 0
   return Math.max(...scores)
 })
@@ -799,84 +800,42 @@ const formatDate = (dateStr: string): string => {
   color: #303133;
 }
 
-.header-actions {
-  display: flex;
-  gap: 10px;
-}
-
-/* Statistics Overview */
-.statistics-overview {
-  margin-bottom: 20px;
-}
-
-.stat-card {
-  display: flex;
-  align-items: center;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.stat-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.stat-icon {
-  width: 60px;
-  height: 60px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-  color: white;
-  margin-right: 15px;
-}
-
-.stat-content {
-  flex: 1;
-}
-
-.stat-value {
-  font-size: 28px;
-  font-weight: bold;
-  color: #303133;
-  line-height: 1;
-  margin-bottom: 5px;
-}
-
-.stat-label {
-  font-size: 14px;
-  color: #909399;
-}
-
-/* Pagination */
-.pagination-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-/* Detail Dialog */
-.detail-content {
-  padding: 10px 0;
-}
-
-.summary-text {
-  padding: 15px;
-  background-color: #f5f7fa;
-  border-radius: 4px;
-  line-height: 1.8;
-  color: #606266;
-  margin-top: 10px;
-}
-
-.detail-content h3 {
-  margin: 20px 0 10px 0;
-  font-size: 16px;
-  color: #303133;
+@media (max-width: 768px) {
+  .management-result-page {
+    padding: 10px;
+  }
+  .filter-form :deep(.el-form-item) {
+    display: block;
+    margin-right: 0;
+  }
+  .header-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  .header-actions .el-button {
+    margin-left: 0 !important;
+    margin-bottom: 5px;
+  }
+  .stat-card {
+    margin-bottom: 10px;
+    padding: 15px;
+  }
+  .stat-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+  .stat-value {
+    font-size: 20px;
+  }
+  :deep(.el-table) {
+    font-size: 12px;
+  }
+  :deep(.el-pagination) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
+  }
 }
 </style>
