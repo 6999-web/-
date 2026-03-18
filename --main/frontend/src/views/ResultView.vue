@@ -559,4 +559,60 @@ const downloadFile = (att: any) => {
   font-size: 14px;
   opacity: 0.9;
 }
+
+@media (max-width: 768px) {
+  .result-view-page {
+    padding: 10px;
+  }
+  
+  .page-header {
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .page-header .header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .page-header h1 {
+    font-size: 20px;
+  }
+  
+  .score-value {
+    font-size: 48px;
+  }
+  
+  .score-label {
+    font-size: 18px;
+  }
+  
+  .card-title {
+    font-size: 16px;
+  }
+  
+  .reviewer-title {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 5px;
+  }
+  
+  .reviewer-date {
+    margin-left: 0 !important;
+  }
+  
+  :deep(.el-table) {
+    width: 100% !important;
+    overflow-x: auto !important;
+  }
+  
+  .el-card :deep(.el-card__header) {
+    padding: 10px 15px;
+  }
+  
+  .el-card :deep(.el-card__body) {
+    padding: 15px;
+  }
+}
 </style>

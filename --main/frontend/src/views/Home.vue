@@ -1,7 +1,14 @@
 <template>
   <div class="platform-layout" :class="`role-${authStore.userRole}`">
+    <!-- 移动端顶部通栏 -->
+    <div class="mobile-top-bar">
+      <el-button @click="isSidebarOpen = !isSidebarOpen" :icon="Menu" circle class="menu-btn" />
+      <span class="mobile-title">教研室数据管理平台</span>
+      <div class="mobile-spacer"></div>
+    </div>
+
     <!-- 左侧导航栏 -->
-    <div class="sidebar">
+    <div class="sidebar" :class="{ 'is-open': isSidebarOpen }">
       <div class="sidebar-header" @click="goToHome">
         <img src="/school-logo.jpg" alt="校徽" class="sidebar-logo" />
         <h2 class="sidebar-title">教研室数据管理平台</h2>
@@ -22,7 +29,7 @@
           :key="index"
           class="menu-item"
           :class="{ active: activeModule === index }"
-          @click="selectModule(index)"
+          @click="handleModuleClick(index)"
         >
           <el-icon class="menu-icon">
             <component :is="module.icon" />
@@ -42,10 +49,15 @@
       </div>
     </div>
 
+    <!-- 侧边栏遮罩层 -->
+    <transition name="fade">
+      <div v-if="isSidebarOpen" class="sidebar-overlay" @click="isSidebarOpen = false"></div>
+    </transition>
+
     <!-- 右侧主内容区 -->
     <div class="main-content">
       <!-- 顶部标签栏 -->
-      <div class="content-tabs">
+      <div class="content-tabs scrollable-tabs">
         <div 
           v-for="(tab, index) in currentTabs" 
           :key="index"
@@ -131,11 +143,14 @@ import {
   TrendCharts,
   Histogram,
   PieChart,
-  Switch
+  Switch,
+  Menu
 } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
+
+const isSidebarOpen = ref(false)
 
 // 模式切换：false=三端模式，true=四角色模式
 const isRoleMode = ref(false)
@@ -365,12 +380,21 @@ const currentFunctions = computed(() => {
 const selectModule = (index: number) => {
   activeModule.value = index
   activeTab.value = 0
+  
   // 仅在四角色模式下更新用户角色
   if (isRoleMode.value) {
     const role = modules.value[index].role as any
     if (role) {
       authStore.setRole(role)
     }
+  }
+}
+
+const handleModuleClick = (index: number) => {
+  selectModule(index)
+  // 如果是移动端，点击模块后关闭侧边栏
+  if (window.innerWidth <= 768) {
+    isSidebarOpen.value = false
   }
 }
 
@@ -398,8 +422,19 @@ const navigateTo = (route: string) => {
 /* 平台布局 */
 .platform-layout {
   display: flex;
+  flex-direction: column; /* 改为column，方便手机端布局 */
   min-height: 100vh;
   background: #f5f7fa;
+}
+
+@media (min-width: 769px) {
+  .platform-layout {
+    flex-direction: row;
+  }
+}
+
+.mobile-top-bar {
+  display: none;
 }
 
 /* 左侧边栏 */
@@ -742,32 +777,113 @@ const navigateTo = (route: string) => {
 @media (max-width: 1024px) {
   .function-grid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 }
 
 @media (max-width: 768px) {
+  .mobile-top-bar {
+    display: flex;
+    align-items: center;
+    background: #1e3a5f;
+    color: white;
+    padding: 0.75rem 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 1001;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  }
+  
+  .menu-btn {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.25rem;
+  }
+  
+  .mobile-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-left: 1rem;
+  }
+  
+  .mobile-spacer {
+    flex: 1;
+  }
+
   .sidebar {
-    width: 60px;
+    left: -220px;
+    width: 220px;
+    transition: transform 0.3s ease;
+    box-shadow: 2px 0 15px rgba(0,0,0,0.2);
   }
   
-  .sidebar-title,
-  .menu-text,
-  .user-details,
-  .role-badge,
-  .mode-toggle {
-    display: none;
+  .sidebar.is-open {
+    transform: translateX(220px);
   }
   
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+  }
+
   .main-content {
-    margin-left: 60px;
+    margin-left: 0;
   }
   
   .content-tabs {
-    padding: 0 1rem;
+    padding: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .scrollable-tabs {
+    flex-wrap: nowrap;
+    white-space: nowrap;
+  }
+  
+  .tab-item {
+    padding: 1rem;
+    flex: 0 0 auto;
   }
   
   .tab-text {
-    display: none;
+    display: inline; /* 在移动端也显示文字 */
+    font-size: 0.85rem;
   }
+
+  .content-area {
+    padding: 1rem;
+  }
+  
+  .content-title {
+    font-size: 1.4rem;
+  }
+  
+  .function-card {
+    padding: 1rem;
+  }
+  
+  .function-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+  
+  .function-title {
+    font-size: 1rem;
+  }
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
 }
 </style>

@@ -12,8 +12,8 @@
         ref="formRef"
         :model="formData"
         :rules="rules"
-        label-width="200px"
-        label-position="left"
+        :label-width="isMobile ? 'auto' : '200px'"
+        :label-position="isMobile ? 'top' : 'left'"
         class="evaluation-form"
       >
         <!-- 一、常规教学工作 -->
@@ -1379,10 +1379,24 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted, type Ref } from 'vue'
-import { UploadFilled, Upload, Document, Delete } from '@element-plus/icons-vue'
+import { ref, reactive, computed, onMounted, onUnmounted, type Ref } from 'vue'
+import { UploadFilled, Upload, Document, Delete, Plus, Check, Loading } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox, type FormInstance, type FormRules, type UploadInstance, type UploadUserFile } from 'element-plus'
 import apiClient from '@/api/client'
+
+const isMobile = ref(false)
+const checkMobile = () => {
+  isMobile.value = window.innerWidth <= 768
+}
+
+onMounted(() => {
+  checkMobile()
+  window.addEventListener('resize', checkMobile)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile)
+})
 
 // Props
 interface Props {
@@ -1635,8 +1649,8 @@ const rules = reactive<FormRules>({
 
 // Calculate regular teaching total score
 const calculateRegularTeachingTotal = () => {
-  const items = formData.regularTeaching
-  return Object.values(items).reduce((total, item) => total + (item.selfScore || 0), 0)
+  const sections = formData.regularTeaching
+  return Object.values(sections).reduce((total: number, item: any) => total + (item.selfScore || 0), 0)
 }
 
 // Scoring rules for reform projects
@@ -1707,7 +1721,7 @@ const updateReformProjectScore = (row: any) => {
 // Calculate reform projects total
 const calculateReformProjectsTotal = () => {
   return formData.highlights.teachingReformProjects.items.reduce(
-    (total, item) => total + (item.score || 0),
+    (total: number, item: any) => total + (item.score || 0),
     0
   )
 }
@@ -1734,7 +1748,7 @@ const updateHonorScore = (row: any) => {
 // Calculate honors total
 const calculateHonorsTotal = () => {
   return formData.highlights.teachingHonors.items.reduce(
-    (total, item) => total + (item.score || 0),
+    (total: number, item: any) => total + (item.score || 0),
     0
   )
 }
@@ -1761,7 +1775,7 @@ const updateCompetitionScore = (row: any) => {
 // Calculate competitions total
 const calculateCompetitionsTotal = () => {
   return formData.highlights.teachingCompetitions.items.reduce(
-    (total, item) => total + (item.score || 0),
+    (total: number, item: any) => total + (item.score || 0),
     0
   )
 }
@@ -1788,7 +1802,7 @@ const updateInnovationScore = (row: any) => {
 // Calculate innovations total
 const calculateInnovationsTotal = () => {
   return formData.highlights.innovationCompetitions.items.reduce(
-    (total, item) => total + (item.score || 0),
+    (total: number, item: any) => total + (item.score || 0),
     0
   )
 }
@@ -2295,13 +2309,57 @@ defineExpose({
 }
 
 /* Responsive layout */
-@media (max-width: 1200px) {
+@media (max-width: 768px) {
   .content-with-attachment {
     flex-direction: column;
+    gap: 15px;
   }
   
   .attachment-section {
     width: 100%;
+  }
+  
+  .score-input-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .card-header h2 {
+    font-size: 18px;
+  }
+  
+  .new-self-evaluation-form {
+    padding: 10px;
+  }
+  
+  .form-card :deep(.el-card__header) {
+    padding: 15px;
+  }
+  
+  .form-card :deep(.el-card__body) {
+    padding: 15px;
+  }
+  
+  .section-title {
+    font-size: 16px;
+  }
+  
+  /* 表格在移动端改为可横向滚动 */
+  :deep(.el-table) {
+    width: 100%;
+    overflow-x: auto;
+  }
+  
+  .subtotal-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 15px;
+  }
+  
+  .subtotal-label {
+    margin-right: 0;
   }
 }
 

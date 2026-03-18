@@ -408,7 +408,73 @@ const handleLogin = async () => {
 @media (max-width: 1024px) {
   .portal-cards {
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: 1.5rem;
+    padding: 0 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .login-content {
+    padding: 1rem;
+  }
+  
+  .header {
+    margin-bottom: 2rem;
+  }
+  
+  .title {
+    font-size: 2rem;
+    letter-spacing: 1px;
+  }
+  
+  .subtitle {
+    font-size: 0.9rem;
+  }
+  
+  .logo-wrapper {
+    width: 90px;
+    height: 90px;
+  }
+  
+  .logo {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .portal-card {
+    padding: 1.5rem;
+    min-height: auto;
+    border-radius: 20px;
+  }
+  
+  .card-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+  }
+  
+  .card-title {
+    font-size: 1.3rem;
+  }
+  
+  .card-desc {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+  
+  .feature-tag {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.6rem;
+  }
+  
+  :deep(.el-dialog) {
+    width: 90% !important;
   }
 }
 

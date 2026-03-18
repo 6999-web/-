@@ -380,4 +380,36 @@ const formatDate = (date: string | number | Date): string => {
   border-color: #f7d794 !important;
   color: #d68910 !important;
 }
+
+@media (max-width: 768px) {
+  .manual-scoring-page {
+    padding: 10px;
+  }
+  
+  .info-card {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 15px;
+    padding: 15px !important;
+  }
+  
+  .evaluation-info {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 10px;
+  }
+  
+  .page-content {
+    max-width: 100%;
+  }
+  
+  :deep(.el-table) {
+    width: 100% !important;
+    overflow-x: auto !important;
+  }
+  
+  .selection-card :deep(.el-card__header) h2 {
+    font-size: 16px;
+  }
+}
 </style>

@@ -529,4 +529,72 @@ const goToLogin = () => router.push('/login')
   .charts-row { grid-template-columns: 1fr 1fr; }
   .metric-card { padding: 1rem; }
 }
+
+@media (max-width: 1024px) {
+  .metrics-row { grid-template-columns: repeat(2, 1fr); }
+  .charts-row { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .header-left {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .header-title h1 {
+    font-size: 1.4rem;
+  }
+  
+  .header-title p {
+    font-size: 0.6rem;
+  }
+  
+  .metrics-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .metric-card {
+    padding: 1.2rem;
+  }
+  
+  .metric-value {
+    font-size: 1.8rem;
+  }
+
+  .dashboard-content {
+    padding: 1rem;
+    gap: 1rem;
+  }
+  
+  .glass-panel {
+    padding: 1rem;
+    border-radius: 16px;
+  }
+  
+  .chart-container {
+    min-height: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-title h1 {
+    font-size: 1.2rem;
+  }
+  
+  .time-display {
+    font-size: 0.8rem;
+  }
+  
+  .metric-value {
+    font-size: 1.5rem;
+  }
+}
 </style>
