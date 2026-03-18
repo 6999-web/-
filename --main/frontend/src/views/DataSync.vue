@@ -157,7 +157,7 @@
             <tfoot>
               <tr>
                 <td colspan="4" class="text-right"><strong>平均得分合计：</strong></td>
-                <td colspan="2"><strong class="total-highlight">{{ selectedEvaluations.length > 0 ? (selectedEvaluations.reduce((sum, e) => sum + (e.final_score || 0), 0) / selectedEvaluations.length).toFixed(2) : '0.00' }} 分</strong></td>
+                <td colspan="2"><strong class="total-highlight">{{ selectedEvaluations.length > 0 ? (selectedEvaluations.reduce((sum: number, e: any) => sum + (e.final_score || 0), 0) / selectedEvaluations.length).toFixed(2) : '0.00' }} 分</strong></td>
               </tr>
             </tfoot>
           </table>
@@ -284,7 +284,7 @@ const syncHistory = ref<SyncTask[]>([])
 
 // Computed: Selected evaluations
 const selectedEvaluations = computed(() => {
-  return evaluations.value.filter(e => selectedEvaluationIds.value.includes(e.id))
+  return evaluations.value.filter((e: any) => selectedEvaluationIds.value.includes(e.id))
 })
 
 // Load evaluations on mount
@@ -554,199 +554,31 @@ const formatDateTime = (dateStr: string): string => {
 </script>
 
 <style scoped>
-.data-sync-page {
-  min-height: 100vh;
-  background-color: #f5f7fa;
-  padding: 20px;
-}
-
-.page-header {
-  margin-bottom: 20px;
-}
-
-.page-header .header-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 8px;
-}
-
-.page-header .header-row h1 {
-  margin: 0;
-}
-
-.back-home-link {
-  color: #409eff;
-  text-decoration: none;
-  font-size: 14px;
-}
-.back-home-link:hover {
-  text-decoration: underline;
-}
-
-.page-header h1 {
-  margin: 0 0 10px 0;
-  font-size: 28px;
-  color: #303133;
-}
-
-.page-content {
-  max-width: 1400px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.selection-card,
-.integration-card,
-.progress-card,
-.history-card {
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.card-header h2, .card-header h3 {
-  margin: 0;
-  font-size: 18px;
-  color: #303133;
-}
-
-.evaluation-table {
-  margin-top: 20px;
-}
-
-.final-score {
-  color: #f56c6c;
-  font-weight: bold;
-}
-
-.no-score {
-  color: #909399;
-}
-
-/* Integrated Table Styles */
-.integrated-table {
-  padding: 10px 0;
-}
-
-.custom-report-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 10px 0;
-  font-size: 14px;
-}
-
-.custom-report-table th, .custom-report-table td {
-  border: 1px solid #ebeef5;
-  padding: 12px;
-  text-align: left;
-}
-
-.custom-report-table th {
-  background-color: #f8f9fb;
-  color: #606266;
-  font-weight: 600;
-}
-
-.custom-report-table tr:hover {
-  background-color: #f5f7fa;
-}
-
-.bold-score {
-  color: #f56c6c;
-  font-weight: bold;
-  font-size: 16px;
-}
-
-.total-highlight {
-  color: #409eff;
-  font-size: 18px;
-}
-
-.text-right {
-  text-align: right;
-}
-
-.integration-footer {
-  margin-top: 15px;
-  padding: 10px;
-  background-color: #f0f9eb;
-  border-radius: 4px;
-  border-left: 4px solid #67c23a;
-}
-
-.hint-text {
-  margin: 0;
-  color: #67c23a;
-  font-size: 14px;
-}
-
-.progress-card {
-  border: 2px solid #409eff;
-}
-
-.progress-content {
-  padding: 20px;
-}
-
-.progress-text {
-  margin-top: 15px;
-  text-align: center;
-  font-size: 16px;
-  color: #606266;
-}
-
-.history-card h2 {
-  margin: 0;
-  font-size: 18px;
-  color: #303133;
-}
-
-.history-item {
-  padding: 10px;
-}
-
-.history-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.task-id {
-  font-size: 12px;
-  color: #909399;
-}
-
-.history-content {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.history-detail {
-  display: flex;
-  align-items: center;
-}
-
-.history-detail .label {
-  font-weight: 600;
-  color: #606266;
-  margin-right: 8px;
-}
-
-.history-detail .value {
-  color: #303133;
-}
-
-.history-detail.error .value {
-  color: #f56c6c;
+@media (max-width: 768px) {
+  .data-sync-page {
+    padding: 10px;
+  }
+  .header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .card-header {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .card-header .el-button {
+    width: 100%;
+  }
+  .integrated-table {
+    overflow-x: auto;
+  }
+  .custom-report-table {
+    min-width: 600px;
+  }
+  :deep(.el-table) {
+    font-size: 12px;
+  }
 }
 </style>

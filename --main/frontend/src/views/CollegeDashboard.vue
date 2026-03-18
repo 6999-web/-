@@ -99,50 +99,87 @@ onMounted(async () => {
 .college-dashboard {
   padding: 20px;
 }
+
+@media (max-width: 768px) {
+  .college-dashboard {
+    padding: 10px;
+  }
+}
+
 .metrics-cards {
   display: flex;
-  gap: 20px;
-  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
 }
+
 .metric-card {
   flex: 1;
+  min-width: 200px;
 }
+
 .metric-value {
-  font-size: 32px;
-  font-weight: bold;
+  font-size: 2rem;
+  font-weight: 700;
   color: #409EFF;
 }
+
 .bar-chart {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 1rem;
 }
+
 .bar-item {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 }
+
 .label {
-  width: 150px;
+  width: 120px;
   text-align: right;
-  margin-right: 15px;
+  margin-right: 12px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
+@media (max-width: 500px) {
+  .label {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 5px;
+  }
+  .bar-container {
+    width: 80%;
+  }
+}
+
 .bar-container {
   flex: 1;
   background: #f0f2f5;
-  height: 20px;
-  border-radius: 10px;
+  height: 18px;
+  border-radius: 9px;
   overflow: hidden;
 }
+
 .bar {
   height: 100%;
-  background: #409EFF;
+  background: linear-gradient(90deg, #409EFF, #66b1ff);
   transition: width 0.5s ease;
 }
+
 .score {
-  width: 50px;
+  width: 45px;
   margin-left: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
 }
+
 .chart-card, .weakness-card {
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
+  border-radius: 8px;
 }
 </style>

@@ -1,7 +1,14 @@
 <template>
   <div class="platform-layout">
+    <!-- 移动端顶部通栏 -->
+    <div class="mobile-top-bar">
+      <el-button @click="isSidebarOpen = !isSidebarOpen" :icon="Menu" circle class="menu-btn" />
+      <span class="mobile-title">教研室端管理平台</span>
+      <div class="mobile-spacer"></div>
+    </div>
+
     <!-- 左侧导航栏 -->
-    <div class="sidebar">
+    <div class="sidebar" :class="{ 'is-open': isSidebarOpen }">
       <div class="sidebar-header" @click="goToHome">
         <img src="/school-logo.jpg" alt="校徽" class="sidebar-logo" />
         <h2 class="sidebar-title">管理端</h2>
@@ -36,7 +43,13 @@
           退出登录
         </el-button>
       </div>
+      </div>
     </div>
+
+    <!-- 侧边栏遮罩层 -->
+    <transition name="fade">
+      <div v-if="isSidebarOpen" class="sidebar-overlay" @click="isSidebarOpen = false"></div>
+    </transition>
 
     <!-- 右侧主内容区 -->
     <div class="main-content">
@@ -110,11 +123,16 @@ import {
   Document,
   Checked,
   FolderOpened,
-  SwitchButton
+  Histogram,
+  PieChart,
+  SwitchButton,
+  Menu
 } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
+
+const isSidebarOpen = ref(false)
 
 // 刷新页面时从 localStorage 恢复登录状态，避免主内容区空白
 onMounted(() => {
@@ -263,6 +281,9 @@ const currentFunctions = computed(() => {
 const selectMenu = (index: number) => {
   activeMenu.value = index
   activeTab.value = 0
+  if (window.innerWidth <= 768) {
+    isSidebarOpen.value = false
+  }
 }
 
 const goToHome = () => {
@@ -271,7 +292,7 @@ const goToHome = () => {
 
 const navigateTo = (route: string) => {
   if (route !== '#') {
-    router.push(route).catch(err => {
+    router.push(route).catch((err: any) => {
       console.error('导航失败:', err)
     })
   }
@@ -580,19 +601,86 @@ const handleLogout = () => {
 }
 
 @media (max-width: 768px) {
-  .sidebar {
-    width: 60px;
+  .mobile-top-bar {
+    display: flex;
+    align-items: center;
+    background: #1e3a5f;
+    color: white;
+    padding: 0.75rem 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 1001;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
   }
   
+  .menu-btn {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.25rem;
+  }
+  
+  .mobile-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-left: 1rem;
+  }
+  
+  .mobile-spacer {
+    flex: 1;
+  }
+
+  .sidebar {
+    left: -220px;
+    width: 220px;
+    transition: transform 0.3s ease;
+    box-shadow: 2px 0 15px rgba(0,0,0,0.2);
+  }
+  
+  .sidebar.is-open {
+    transform: translateX(220px);
+  }
+  
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+  }
+
+  .main-content {
+    margin-left: 0;
+  }
+
   .sidebar-title,
   .menu-text,
   .user-details,
   .role-badge {
-    display: none;
+    display: block;
+  }
+
+  .content-tabs {
+    padding: 0 1rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
   
-  .main-content {
-    margin-left: 60px;
+  .content-area {
+    padding: 1.5rem 1rem;
   }
+  
+  .content-title {
+    font-size: 1.5rem;
+  }
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
 }
 </style>

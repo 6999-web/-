@@ -1,8 +1,11 @@
 <template>
   <div class="president-office-dashboard">
     <div class="dashboard-header-container">
-      <h1>校长办公会 - 实时数据监控</h1>
-      <el-button @click="goBackToHome" type="primary" :icon="HomeFilled" circle title="返回校长办公会主页" />
+      <div class="header-left">
+        <h1>校长办公会 - 实时监控</h1>
+        <p class="subtitle">实时监控评教流程各个环节的进度与统计</p>
+      </div>
+      <el-button @click="goBackToHome" type="primary" :icon="HomeFilled" circle title="返回首页" />
     </div>
     
     <!-- Filters -->
@@ -110,51 +113,35 @@
         :gutter="20"
         class="summary-cards"
       >
-        <el-col :span="6">
+        <el-col :xs="12" :sm="12" :md="6" :lg="6">
           <el-card>
             <div class="stat-card">
-              <div class="stat-label">
-                教研室总数
-              </div>
-              <div class="stat-value">
-                {{ dashboardData.teaching_office_scores.length }}
-              </div>
+              <div class="stat-label">教研室总数</div>
+              <div class="stat-value">{{ dashboardData.teaching_office_scores.length }}</div>
             </div>
           </el-card>
         </el-col>
-        <el-col :span="6">
+        <el-col :xs="12" :sm="12" :md="6" :lg="6">
           <el-card>
             <div class="stat-card">
-              <div class="stat-label">
-                平均AI评分
-              </div>
-              <div class="stat-value">
-                {{ averageAIScore.toFixed(2) }}
-              </div>
+              <div class="stat-label">平均AI评分</div>
+              <div class="stat-value">{{ averageAIScore.toFixed(2) }}</div>
             </div>
           </el-card>
         </el-col>
-        <el-col :span="6">
+        <el-col :xs="12" :sm="12" :md="6" :lg="6">
           <el-card>
             <div class="stat-card">
-              <div class="stat-label">
-                平均最终得分
-              </div>
-              <div class="stat-value">
-                {{ averageFinalScore.toFixed(2) }}
-              </div>
+              <div class="stat-label">平均最终得分</div>
+              <div class="stat-value">{{ averageFinalScore.toFixed(2) }}</div>
             </div>
           </el-card>
         </el-col>
-        <el-col :span="6">
+        <el-col :xs="12" :sm="12" :md="6" :lg="6">
           <el-card>
             <div class="stat-card">
-              <div class="stat-label">
-                已完成最终评分
-              </div>
-              <div class="stat-value">
-                {{ completedCount }}
-              </div>
+              <div class="stat-label">已完成最终评分</div>
+              <div class="stat-value">{{ completedCount }}</div>
             </div>
           </el-card>
         </el-col>
@@ -168,15 +155,14 @@
           </div>
         </template>
         <el-row :gutter="16">
-          <el-col :span="4" v-for="stage in evaluationStages" :key="stage.key">
-            <div style="text-align:center; padding: 12px; background: #f5f7fa; border-radius: 8px; margin-bottom: 8px;">
-              <div style="font-size:24px; font-weight:bold; color:#409eff;">{{ stage.count }}</div>
-              <div style="font-size:12px; color:#606266; margin-top:4px;">{{ stage.label }}</div>
+          <el-col :xs="12" :sm="8" :md="4" v-for="stage in evaluationStages" :key="stage.key">
+            <div class="stage-item">
+              <div class="stage-count">{{ stage.count }}</div>
+              <div class="stage-label">{{ stage.label }}</div>
               <el-progress
                 :percentage="dashboardData.teaching_office_scores.length > 0 ? Math.round(stage.count / dashboardData.teaching_office_scores.length * 100) : 0"
                 :status="stage.count > 0 ? 'success' : ''"
                 :stroke-width="6"
-                style="margin-top:8px;"
               />
             </div>
           </el-col>
@@ -342,7 +328,7 @@
         class="charts-section"
       >
         <!-- Score Comparison Chart -->
-        <el-col :span="12">
+        <el-col :xs="24" :sm="24" :md="12" :lg="12">
           <el-card>
             <template #header>
               <div class="card-header">
@@ -352,7 +338,7 @@
             <div class="chart-container">
               <div class="chart-placeholder">
                 <div
-                  v-for="(score, index) in sortedScores.slice(0, 10)"
+                  v-for="(score, index) in sortedScores.slice(0, 5)"
                   :key="index"
                   class="bar-chart-item"
                 >
@@ -377,8 +363,8 @@
                   </div>
                 </div>
                 <div class="chart-legend">
-                  <span class="legend-item"><span class="legend-color ai-color" /> AI评分</span>
-                  <span class="legend-item"><span class="legend-color final-color" /> 最终得分</span>
+                  <span class="legend-item"><span class="legend-color ai-color" /> AI</span>
+                  <span class="legend-item"><span class="legend-color final-color" /> 最终</span>
                 </div>
               </div>
             </div>
@@ -386,19 +372,19 @@
         </el-col>
 
         <!-- Ranking Chart -->
-        <el-col :span="12">
+        <el-col :xs="24" :sm="24" :md="12" :lg="12">
           <el-card>
             <template #header>
               <div class="card-header">
                 <span>横向对比排名</span>
               </div>
             </template>
-            <div class="chart-container">
+            <div class="chart-container scrollable-table">
               <el-table
                 :data="rankedScores"
                 stripe
                 style="width: 100%"
-                max-height="400"
+                max-height="300"
               >
                 <el-table-column
                   label="排名"
@@ -907,61 +893,113 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.president-office-dashboard {
+  padding: 24px;
+  background-color: #f0f2f5;
+  min-height: 100vh;
+}
+
+@media (max-width: 768px) {
+  .president-office-dashboard {
+    padding: 12px;
+  }
+}
+
 .dashboard-header-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
-.dashboard-header-container h1 {
+
+.header-left h1 {
   margin: 0;
+  font-size: 1.75rem;
+  color: #1a237e;
+  font-weight: 700;
 }
-.president-office-dashboard {
-  padding: 20px;
+
+.subtitle {
+  margin: 4px 0 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .header-left h1 {
+    font-size: 1.25rem;
+  }
+  .subtitle {
+    display: none;
+  }
 }
 
 .filter-card {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
-.loading-container {
-  text-align: center;
-  padding: 50px;
-}
-
-.loading-container .el-icon {
-  font-size: 48px;
-  margin-bottom: 10px;
+@media (max-width: 768px) {
+  .filter-card :deep(.el-form--inline .el-form-item) {
+    display: block;
+    margin-right: 0;
+  }
 }
 
 .summary-cards {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .stat-card {
   text-align: center;
+  padding: 8px 0;
 }
 
 .stat-label {
-  font-size: 14px;
+  font-size: 0.85rem;
   color: #909399;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .stat-value {
-  font-size: 32px;
-  font-weight: bold;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1a237e;
+}
+
+@media (max-width: 768px) {
+  .stat-value {
+    font-size: 1.25rem;
+  }
+}
+
+.stage-item {
+  text-align: center;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  border: 1px solid #edf2f7;
+}
+
+.stage-count {
+  font-size: 1.5rem;
+  font-weight: 700;
   color: #409eff;
 }
 
-.scores-table-card {
-  margin-bottom: 20px;
+.stage-label {
+  font-size: 0.8rem;
+  color: #4a5568;
+  margin: 4px 0 8px;
 }
 
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.scores-table-card {
+  margin-bottom: 24px;
+}
+
+.scrollable-table {
+  width: 100%;
+  overflow-x: auto;
 }
 
 .reviewer-scores {

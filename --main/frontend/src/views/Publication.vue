@@ -356,8 +356,8 @@ const handlePublish = async () => {
   }
 
   const selectedNames = evaluations.value
-    .filter(e => selectedIds.value.includes(e.id))
-    .map(e => e.teaching_office_name)
+    .filter((e: any) => selectedIds.value.includes(e.id))
+    .map((e: any) => e.teaching_office_name)
     .join('、')
 
   try {
@@ -437,7 +437,7 @@ const handleExpandChange = (row: any, expanded: boolean) => {
   if (expanded) {
     if (!expandedRows.value.includes(row.id)) expandedRows.value.push(row.id)
   } else {
-    expandedRows.value = expandedRows.value.filter(id => id !== row.id)
+    expandedRows.value = expandedRows.value.filter((id: any) => id !== row.id)
   }
 }
 
@@ -448,7 +448,7 @@ const getManualAvg = (scores: any[]) => {
 }
 
 const downloadFile = (att: any) => {
-  const baseURL = import.meta.env.VITE_API_BASE_URL || '/api'
+  const baseURL = (import.meta as any).env.VITE_API_BASE_URL || '/api'
   const token = localStorage.getItem('token')
   const url = `${baseURL}/teaching-office/attachments/${att.id}/download`
   fetch(url, { headers: { Authorization: `Bearer ${token}` } })
@@ -687,6 +687,34 @@ const formatDateTime = (str: string) => {
 
 .sync-result {
   padding: 4px;
+}
+
+@media (max-width: 768px) {
+  .publication-page {
+    padding: 12px;
+  }
+  .header-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .header-row h1 {
+    font-size: 1.5rem;
+  }
+  .toolbar-left, .toolbar-right {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+  .toolbar-right {
+    justify-content: flex-start;
+  }
+  .el-button {
+    flex: 1;
+    margin-left: 0 !important;
+    margin-bottom: 5px;
+  }
+  :deep(.el-table) {
+    font-size: 12px;
+  }
 }
 
 /* 管理端面包屑 */

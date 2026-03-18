@@ -72,11 +72,17 @@
     <el-dialog
       v-model="showLoginDialog"
       :title="loginDialogTitle"
-      width="400px"
+      :width="isMobile ? '90%' : '400px'"
       :close-on-click-modal="false"
       class="custom-dialog"
     >
-      <el-form :model="loginForm" :rules="loginRules" ref="loginFormRef" label-width="80px">
+      <el-form
+        :model="loginForm"
+        :rules="loginRules"
+        ref="loginFormRef"
+        :label-width="isMobile ? 'auto' : '80px'"
+        :label-position="isMobile ? 'top' : 'left'"
+      >
         <el-form-item label="用户名" prop="username">
           <el-input
             v-model="loginForm.username"
@@ -117,7 +123,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { Edit, Setting, Monitor, ArrowRight, User, Lock, Loading } from '@element-plus/icons-vue'
@@ -130,6 +136,20 @@ const showLoginDialog = ref(false)
 const selectedPortal = ref<'teaching-office' | 'management' | ''>('')
 const loginLoading = ref(false)
 const loginFormRef = ref()
+const isMobile = ref(false)
+
+const checkMobile = () => {
+  isMobile.value = window.innerWidth <= 768
+}
+
+onMounted(() => {
+  checkMobile()
+  window.addEventListener('resize', checkMobile)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile)
+})
 
 const loginForm = ref({
   username: '',

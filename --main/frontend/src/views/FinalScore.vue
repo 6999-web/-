@@ -23,7 +23,7 @@
           :data="evaluations"
           stripe
           style="width: 100%"
-          class="evaluation-table"
+          class="evaluation-table scrollable-table"
           @row-click="handleSelectEvaluation"
         >
           <el-table-column
@@ -102,7 +102,7 @@
               </el-tag>
             </div>
             <div class="info-item">
-              <span class="label">评审人打分数：</span>
+              <span class="label">评审人：</span>
               <el-tag type="info">
                 {{ selectedEvaluation?.manualScoresCount }}人
               </el-tag>
@@ -112,6 +112,7 @@
             type="info"
             size="small"
             @click="handleBackToList"
+            class="back-btn"
           >
             返回列表
           </el-button>
@@ -459,14 +460,14 @@ function formatDateTime(dateStr: string): string {
   padding: 20px;
 }
 
-.page-header {
-  margin-bottom: 20px;
+@media (max-width: 768px) {
+  .final-score-page {
+    padding: 10px;
+  }
 }
 
-.page-header h1 {
-  margin: 0 0 10px 0;
-  font-size: 28px;
-  color: #303133;
+.page-header {
+  margin-bottom: 20px;
 }
 
 .page-content {
@@ -480,20 +481,17 @@ function formatDateTime(dateStr: string): string {
 
 .selection-card h2 {
   margin: 0;
-  font-size: 18px;
+  font-size: 1.1rem;
   color: #303133;
+}
+
+.scrollable-table {
+  width: 100%;
+  overflow-x: auto;
 }
 
 .evaluation-table {
   margin-top: 20px;
-}
-
-.evaluation-table :deep(.el-table__row) {
-  cursor: pointer;
-}
-
-.evaluation-table :deep(.el-table__row:hover) {
-  background-color: #f5f7fa;
 }
 
 .final-score-section {
@@ -503,16 +501,21 @@ function formatDateTime(dateStr: string): string {
 }
 
 .info-card {
+  padding: 15px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+}
+
+.info-card :deep(.el-card__body) {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
+  gap: 15px;
 }
 
 .evaluation-info {
   display: flex;
-  gap: 30px;
+  gap: 20px;
   align-items: center;
   flex-wrap: wrap;
 }
@@ -526,16 +529,29 @@ function formatDateTime(dateStr: string): string {
   font-weight: 600;
   color: #606266;
   margin-right: 8px;
+  font-size: 0.9rem;
 }
 
 .info-item .value {
   color: #303133;
-  font-size: 16px;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+  .back-btn {
+    width: 100%;
+  }
+  .info-card :deep(.el-card__body) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 /* Details Dialog Styles */
-.details-dialog {
-  max-height: 80vh;
+@media (max-width: 768px) {
+  :deep(.details-dialog) {
+    width: 95% !important;
+  }
 }
 
 .loading-container {
@@ -565,11 +581,13 @@ function formatDateTime(dateStr: string): string {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .score-card-header h3 {
   margin: 0;
-  font-size: 18px;
+  font-size: 1.1rem;
   color: #303133;
 }
 
@@ -590,10 +608,7 @@ function formatDateTime(dateStr: string): string {
   display: flex;
   align-items: center;
   gap: 10px;
-}
-
-.reviewer-info h3 {
-  margin: 0;
+  flex-wrap: wrap;
 }
 
 .role-tag {
@@ -605,19 +620,19 @@ function formatDateTime(dateStr: string): string {
 }
 
 .submit-time {
-  font-size: 14px;
+  font-size: 13px;
   color: #909399;
 }
 
 .score-details {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 15px;
 }
 
 .score-item {
   flex: 1;
-  min-width: 200px;
+  min-width: 150px;
 }
 
 .score-item .label {
@@ -626,23 +641,15 @@ function formatDateTime(dateStr: string): string {
   margin-right: 8px;
 }
 
-.score-item .value {
-  color: #303133;
-}
-
 .score-item .value.highlight {
   color: #f56c6c;
   font-weight: bold;
-  font-size: 20px;
-}
-
-.indicator-scores {
-  margin-top: 20px;
+  font-size: 1.25rem;
 }
 
 .indicator-scores h4 {
   margin: 0 0 15px 0;
-  font-size: 16px;
+  font-size: 1rem;
   color: #303133;
 }
 
@@ -664,53 +671,44 @@ function formatDateTime(dateStr: string): string {
 .indicator-name {
   font-weight: 600;
   color: #303133;
-  font-size: 14px;
+  font-size: 0.9rem;
 }
 
 .indicator-score {
   color: #f56c6c;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 1.1rem;
 }
 
 .indicator-reasoning,
 .indicator-comment {
   color: #606266;
-  font-size: 13px;
+  font-size: 0.85rem;
   line-height: 1.5;
   margin-top: 4px;
 }
 
 .manual-scores-section {
-  margin-top: 30px;
+  margin-top: 24px;
 }
 
 .section-title {
   margin: 20px 0;
-  font-size: 18px;
+  font-size: 1.1rem;
   color: #303133;
   font-weight: 600;
 }
 
-.manual-score-details {
-  padding: 10px 0;
-}
-
 .total-score-row {
   text-align: right;
-  font-size: 18px;
+  font-size: 1.1rem;
   padding: 10px 0;
-}
-
-.total-score-row .label {
-  font-weight: 600;
-  color: #606266;
-  margin-right: 10px;
 }
 
 .total-score-row .value {
   color: #f56c6c;
   font-weight: bold;
-  font-size: 20px;
+  font-size: 1.5rem;
 }
+</style>
 </style>

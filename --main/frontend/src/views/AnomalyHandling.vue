@@ -17,19 +17,19 @@
         <div class="analysis-card" v-loading="analysisLoading">
           <h3>异常数据统计与原因分析</h3>
           <el-row :gutter="20" class="stats-row">
-            <el-col :span="8">
+            <el-col :xs="24" :sm="8">
               <el-card shadow="hover" class="stat-card">
                 <div class="stat-value">{{ analysisSummary.total }}</div>
                 <div class="stat-label">异常总数</div>
               </el-card>
             </el-col>
-            <el-col :span="8">
+            <el-col :xs="12" :sm="8">
               <el-card shadow="hover" class="stat-card warning">
                 <div class="stat-value">{{ analysisSummary.pending }}</div>
                 <div class="stat-label">待处理</div>
               </el-card>
             </el-col>
-            <el-col :span="8">
+            <el-col :xs="12" :sm="8">
               <el-card shadow="hover" class="stat-card success">
                 <div class="stat-value">{{ analysisSummary.handled }}</div>
                 <div class="stat-label">已处理</div>
@@ -86,7 +86,7 @@ const analysisSummary = ref<{
   reasons: []
 })
 
-watch(() => route.query.tab, (tab) => {
+watch(() => route.query.tab, (tab: any) => {
   if (tab === 'analysis') activeTab.value = 'analysis'
 })
 
@@ -133,37 +133,35 @@ async function loadAnalysis () {
 onMounted(() => {
   if (activeTab.value === 'analysis') loadAnalysis()
 })
-watch(activeTab, (tab) => {
+watch(activeTab, (tab: any) => {
   if (tab === 'analysis') loadAnalysis()
 })
 </script>
 
 <style scoped>
-.anomaly-handling-view {
-  min-height: 100vh;
-  background-color: #f5f7fa;
-  padding: 20px;
+.review-api { margin-top: 10px; }
+
+@media (max-width: 768px) {
+  .anomaly-handling-view {
+    padding: 10px;
+  }
+  .page-header {
+    padding: 15px;
+  }
+  .page-header h1 {
+    font-size: 1.5rem;
+  }
+  .anomaly-tabs {
+    padding: 10px;
+  }
+  .stat-card {
+    margin-bottom: 10px;
+  }
+  .stat-value {
+    font-size: 1.5rem;
+  }
+  :deep(.el-table) {
+    font-size: 12px;
+  }
 }
-.page-header {
-  max-width: 1400px;
-  margin: 0 auto 20px;
-  padding: 30px;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-}
-.page-header h1 { margin: 0 0 10px 0; font-size: 28px; color: #303133; font-weight: 600; }
-.page-description { margin: 0; font-size: 14px; color: #606266; line-height: 1.6; }
-.back-home-link { margin-left: 12px; color: #409eff; text-decoration: none; }
-.back-home-link:hover { text-decoration: underline; }
-.anomaly-tabs { max-width: 1400px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
-.tab-desc { margin: 0 0 16px 0; font-size: 13px; color: #909399; }
-.analysis-card h3 { margin: 0 0 16px 0; font-size: 16px; }
-.analysis-card h4 { margin: 20px 0 10px 0; font-size: 14px; color: #606266; }
-.stats-row { margin-bottom: 20px; }
-.stat-card { text-align: center; }
-.stat-value { font-size: 28px; font-weight: 600; color: #409eff; }
-.stat-card.warning .stat-value { color: #e6a23c; }
-.stat-card.success .stat-value { color: #67c23a; }
-.stat-label { font-size: 13px; color: #909399; margin-top: 4px; }
 </style>
