@@ -31,18 +31,18 @@
         <el-table-column prop="target" label="改进目标" width="180" show-overflow-tooltip />
         <el-table-column prop="measures" label="具体措施" width="200" show-overflow-tooltip />
         <el-table-column prop="expected_effect" label="预期效果" width="150" show-overflow-tooltip />
-        <el-table-column prop="charger_id" label="责任人" width="100" />
-        <el-table-column prop="deadline" label="完成时限" width="120">
-            <template #default="scope">
-                {{ formatDate(scope.row.deadline) }}
-            </template>
-        </el-table-column>
-        <el-table-column prop="status" label="状态" width="100">
+        <el-table-column prop="status" label="状态" width="90">
           <template #default="scope">
-            <el-tag :type="getStatusType(scope.row.status)">
+            <el-tag :type="getStatusType(scope.row.status)" size="small">
               {{ getStatusText(scope.row.status) }}
             </el-tag>
           </template>
+        </el-table-column>
+        <el-table-column prop="charger_id" label="责任人" width="100" class-name="hidden-mobile" />
+        <el-table-column prop="deadline" label="完成时限" width="120" class-name="hidden-mobile">
+            <template #default="scope">
+                {{ formatDate(scope.row.deadline) }}
+            </template>
         </el-table-column>
         <el-table-column label="操作" width="100" fixed="right">
            <template #default="scope">
@@ -331,13 +331,29 @@ onMounted(() => {
   font-weight: 600;
 }
 
-:deep(.el-table) {
-  font-size: 14px;
-}
-
-:deep(.el-table th) {
-  background-color: #f5f7fa;
-  color: #606266;
-  font-weight: 600;
+@media (max-width: 768px) {
+  .improvement-plan {
+    padding: 10px;
+  }
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .header-info {
+    width: 100%;
+  }
+  .hidden-mobile {
+    display: none !important;
+  }
+  :deep(.el-table) {
+    font-size: 12px;
+  }
+  :deep(.el-dialog) {
+    width: 95% !important;
+  }
+  :deep(.el-descriptions) {
+    font-size: 12px;
+  }
 }
 </style>

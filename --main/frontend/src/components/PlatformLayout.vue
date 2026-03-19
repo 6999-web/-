@@ -33,6 +33,15 @@
         <div class="user-info">
           <el-icon class="user-avatar"><User /></el-icon>
           <span class="user-name">admin</span>
+          <el-button 
+            type="danger" 
+            :icon="SwitchButton" 
+            link 
+            class="logout-btn"
+            @click="handleLogout"
+          >
+            退出登录
+          </el-button>
         </div>
       </div>
     </div>
@@ -52,7 +61,11 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { User, Edit, Setting, Monitor, Menu } from '@element-plus/icons-vue'
+import { User, Edit, Setting, Monitor, Menu, SwitchButton } from '@element-plus/icons-vue'
+import { useAuthStore } from '@/stores/auth'
+import { ElMessageBox } from 'element-plus'
+
+const authStore = useAuthStore()
 
 const isSidebarOpen = ref(false)
 
@@ -84,6 +97,17 @@ const handleNavigate = (path: string) => {
 
 const isModuleActive = (path: string) => {
   return route.path === path
+}
+
+const handleLogout = () => {
+  ElMessageBox.confirm('确认退出登录吗？', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(() => {
+    authStore.logout()
+    router.push('/login')
+  }).catch(() => {})
 }
 </script>
 
@@ -195,15 +219,30 @@ const isModuleActive = (path: string) => {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 8px;
   color: white;
+  gap: 8px;
 }
 
 .user-avatar {
   font-size: 1.5rem;
-  margin-right: 0.5rem;
+  flex-shrink: 0;
 }
 
 .user-name {
   font-size: 0.9rem;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logout-btn {
+  padding: 0;
+  font-size: 0.85rem;
+  color: #ff4d4f;
+}
+
+.logout-btn:hover {
+  color: #ff7875;
 }
 
 /* 主内容区 */
@@ -267,12 +306,23 @@ const isModuleActive = (path: string) => {
 
   .main-content {
     margin-left: 0;
+    padding: 10px 12px;
   }
   
   .sidebar-title,
   .menu-text,
   .user-name {
-    display: block; /* 在抽屉里要显示文字 */
+    display: block;
+  }
+  
+  .user-info {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .logout-btn {
+    width: 100%;
+    margin-top: 5px;
   }
 }
 

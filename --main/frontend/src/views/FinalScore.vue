@@ -44,27 +44,32 @@
           </el-table-column>
           <el-table-column
             prop="manualScoresCount"
-            label="评审人打分数"
-            width="150"
+            label="打分数"
+            width="80"
+            align="center"
+            class-name="hidden-mobile"
           >
             <template #default="scope">
-              <el-tag type="info">
-                {{ scope.row.manualScoresCount }}人
+              <el-tag type="info" size="small">
+                {{ scope.row.manualScoresCount }}
               </el-tag>
             </template>
           </el-table-column>
           <el-table-column
             prop="submittedAt"
-            label="提交时间"
-            width="180"
+            label="时间"
+            width="120"
+            align="center"
+            class-name="hidden-mobile"
           >
             <template #default="scope">
-              {{ scope.row.submittedAt ? formatDate(scope.row.submittedAt) : '-' }}
+              {{ scope.row.submittedAt ? formatDate(scope.row.submittedAt).split(' ')[0] : '-' }}
             </template>
           </el-table-column>
           <el-table-column
             label="操作"
-            width="150"
+            width="100"
+            align="center"
           >
             <template #default="scope">
               <el-button
@@ -709,6 +714,16 @@ function formatDateTime(dateStr: string): string {
   color: #f56c6c;
   font-weight: bold;
   font-size: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .hidden-mobile {
+    display: none !important;
+  }
+  
+  .evaluation-table :deep(.el-table__row) {
+    cursor: pointer;
+  }
 }
 </style>
 </style>

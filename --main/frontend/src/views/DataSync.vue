@@ -54,8 +54,10 @@
           />
           <el-table-column
             prop="evaluation_year"
-            label="考评年度"
-            width="120"
+            label="年度"
+            width="80"
+            align="center"
+            class-name="hidden-mobile"
           />
           <el-table-column
             prop="status"
@@ -96,21 +98,25 @@
             </template>
           </el-table-column>
           <el-table-column
-            label="同步状态"
-            width="150"
+            label="同步"
+            width="80"
+            align="center"
+            class-name="hidden-mobile"
           >
             <template #default="scope">
               <el-tag
                 v-if="scope.row.synced"
                 type="success"
+                size="small"
               >
-                已同步
+                已
               </el-tag>
               <el-tag
                 v-else
                 type="info"
+                size="small"
               >
-                未同步
+                未
               </el-tag>
             </template>
           </el-table-column>
@@ -566,10 +572,11 @@ const formatDateTime = (dateStr: string): string => {
   .card-header {
     flex-direction: column;
     gap: 10px;
-    align-items: flex-start;
+    align-items: flex-start !important;
   }
   .card-header .el-button {
     width: 100%;
+    margin-left: 0 !important;
   }
   .integrated-table {
     overflow-x: auto;
@@ -579,6 +586,10 @@ const formatDateTime = (dateStr: string): string => {
   }
   :deep(.el-table) {
     font-size: 12px;
+  }
+  
+  .hidden-mobile {
+    display: none !important;
   }
 }
 </style>

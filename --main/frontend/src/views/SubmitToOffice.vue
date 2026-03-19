@@ -34,7 +34,7 @@
               <el-tag :type="getStatusTagType(row.status)">{{ getStatusLabel(row.status) }}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="submitted_at" label="提交时间" width="180">
+          <el-table-column prop="submitted_at" label="提交时间" width="160" class-name="hidden-mobile">
             <template #default="{ row }">{{ formatTime(row.submitted_at) }}</template>
           </el-table-column>
           <el-table-column label="操作" width="160" fixed="right">
@@ -175,28 +175,31 @@ onUnmounted(() => document.removeEventListener('visibilitychange', onVisibilityC
 </script>
 
 <style scoped>
-.submit-to-office-page {
-  min-height: 100vh;
-  background: #f5f7fa;
-  padding: 20px;
+@media (max-width: 768px) {
+  .submit-to-office-page {
+    padding: 10px;
+  }
+  .page-header {
+    padding: 15px;
+  }
+  .page-header h1 {
+    font-size: 20px;
+  }
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .card-header .el-select,
+  .card-header .el-button {
+    width: 100% !important;
+    margin-left: 0 !important;
+  }
+  .hidden-mobile {
+    display: none !important;
+  }
+  :deep(.el-table) {
+    font-size: 12px;
+  }
 }
-.page-header {
-  margin-bottom: 20px;
-  padding: 20px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-}
-.page-header h1 { margin: 0 0 8px 0; font-size: 24px; color: #303133; }
-.page-description { margin: 0; color: #606266; font-size: 14px; }
-.back-home-link { margin-left: 12px; color: #409eff; text-decoration: none; }
-.back-home-link:hover { text-decoration: underline; }
-.content-card { max-width: 1200px; margin: 0 auto; }
-.card-header { display: flex; align-items: center; gap: 12px; }
-.section { margin-top: 28px; }
-.section:first-of-type { margin-top: 0; }
-.section-title { display: flex; align-items: center; gap: 8px; margin: 0 0 8px 0; font-size: 16px; color: #303133; }
-.section-title .warning-icon { color: #e6a23c; }
-.section-title.success .el-icon { color: #67c23a; }
-.section-desc { margin: 0 0 12px 0; font-size: 13px; color: #909399; }
 </style>

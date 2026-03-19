@@ -146,27 +146,18 @@
               <el-tag :type="getStatusType(row.status)">{{ getStatusLabel(row.status) }}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="AI评分" width="100" align="center">
+          <el-table-column label="AI评分" width="80" align="center" class-name="hidden-mobile">
             <template #default="{ row }">
               <span v-if="row.ai_score != null" class="score-text">{{ row.ai_score.toFixed(1) }}</span>
               <span v-else class="no-data">-</span>
             </template>
           </el-table-column>
-          <el-table-column label="人工评分(均)" width="120" align="center">
-            <template #default="{ row }">
-              <span v-if="row.manual_scores && row.manual_scores.length > 0" class="score-text">
-                {{ getManualAvg(row.manual_scores).toFixed(1) }}
-                <small>({{ row.manual_scores.length }}人)</small>
-              </span>
-              <span v-else class="no-data">-</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="最终得分" width="110" align="center">
+          <el-table-column label="最终得分" width="90" align="center">
             <template #default="{ row }">
               <span v-if="row.final_score != null" class="final-score">
-                {{ row.final_score.toFixed(1) }} 分
+                {{ row.final_score.toFixed(1) }}
               </span>
-              <span v-else class="no-data">未确定</span>
+              <span v-else class="no-data">-</span>
             </template>
           </el-table-column>
           <el-table-column label="附件数" width="90" align="center">
@@ -176,13 +167,13 @@
               </el-badge>
             </template>
           </el-table-column>
-          <el-table-column label="公示状态" width="140" align="center">
+          <el-table-column label="公示状态" width="120" align="center">
             <template #default="{ row }">
-              <el-tag v-if="row.is_distributed" type="success">已分发到教研室</el-tag>
-              <el-tag v-else-if="row.is_published" type="warning">已公示(待分发)</el-tag>
-              <el-tag v-else-if="row.status === 'ready_for_final'" type="primary">已提交到办公室</el-tag>
-              <el-tag v-else-if="row.status === 'finalized'" type="warning">已定分(待公示)</el-tag>
-              <el-tag v-else type="info">待公示</el-tag>
+              <el-tag v-if="row.is_distributed" type="success" size="small">已分发</el-tag>
+              <el-tag v-else-if="row.is_published" type="warning" size="small">已公示</el-tag>
+              <el-tag v-else-if="row.status === 'ready_for_final'" type="primary" size="small">待定分</el-tag>
+              <el-tag v-else-if="row.status === 'finalized'" type="warning" size="small">待公示</el-tag>
+              <el-tag v-else type="info" size="small">待公示</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="90" align="center">
@@ -714,6 +705,10 @@ const formatDateTime = (str: string) => {
   }
   :deep(.el-table) {
     font-size: 12px;
+  }
+  
+  .hidden-mobile {
+    display: none !important;
   }
 }
 

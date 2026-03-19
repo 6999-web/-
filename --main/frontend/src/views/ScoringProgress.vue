@@ -38,7 +38,7 @@
               </el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="submitted_at" label="提交时间" width="180">
+          <el-table-column prop="submitted_at" label="提交时间" width="160" class-name="hidden-mobile">
             <template #default="{ row }">{{ formatTime(row.submitted_at) }}</template>
           </el-table-column>
           <el-table-column label="操作" width="120" fixed="right">
@@ -205,16 +205,29 @@ onUnmounted(() => document.removeEventListener('visibilitychange', onVisibilityC
 .section-title.success .el-icon { color: #67c23a; }
 .section-desc { margin: 0 0 12px 0; font-size: 13px; color: #909399; }
 
-/* Custom yellow status tag */
-.status-yellow {
-  background-color: #fef0cd !important;
-  border-color: #f7d794 !important;
-  color: #d68910 !important;
-}
-
-.status-yellow.el-tag {
-  background-color: #fef0cd !important;
-  border-color: #f7d794 !important;
-  color: #d68910 !important;
+@media (max-width: 768px) {
+  .scoring-progress-page {
+    padding: 10px;
+  }
+  .page-header {
+    padding: 15px;
+  }
+  .page-header h1 {
+    font-size: 20px;
+  }
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .card-header .el-select {
+    width: 100% !important;
+  }
+  .hidden-mobile {
+    display: none !important;
+  }
+  :deep(.el-table) {
+    font-size: 12px;
+  }
 }
 </style>

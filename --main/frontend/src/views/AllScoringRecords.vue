@@ -22,7 +22,7 @@
           </template>
           <el-table :data="auditRecords" border stripe>
             <el-table-column prop="teaching_office_name" label="教研室" min-width="130" />
-            <el-table-column prop="evaluation_year" label="年度" width="80" />
+            <el-table-column prop="evaluation_year" label="年度" width="70" class-name="hidden-mobile" />
             <el-table-column prop="score_type" label="类型" width="100">
               <template #default="{ row }">
                 <el-tag v-if="row.score_type === 'manual_score'" type="primary">手动评分</el-tag>
@@ -34,7 +34,7 @@
               <template #default="{ row }">{{ row.score_value != null ? Number(row.score_value).toFixed(1) : '-' }}</template>
             </el-table-column>
             <el-table-column prop="reviewer_name" label="评审人" width="100" />
-            <el-table-column prop="created_at" label="时间" width="170">
+            <el-table-column prop="created_at" label="时间" width="160" class-name="hidden-mobile">
               <template #default="{ row }">{{ formatTime(row.created_at) }}</template>
             </el-table-column>
             <el-table-column label="操作" width="100" fixed="right">
@@ -208,22 +208,29 @@ watch(activeTab, (tab) => {
 </script>
 
 <style scoped>
-.all-scoring-records-page { min-height: 100vh; background: #f5f7fa; padding: 20px; }
-.page-header { margin-bottom: 20px; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
-.page-header .header-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
-.page-header .header-row h1 { margin: 0; font-size: 24px; color: #303133; }
-.page-header .el-breadcrumb { margin-bottom: 8px; }
-.back-home-link { color: #409eff; text-decoration: none; font-size: 14px; }
-.back-home-link:hover { text-decoration: underline; }
-.page-header h1 { margin: 0 0 8px 0; font-size: 24px; color: #303133; }
-.page-description { margin: 0; color: #606266; font-size: 14px; }
-.content-tabs { max-width: 1200px; margin: 0 auto; }
-.card { margin-bottom: 20px; }
-.card .el-card__header { display: flex; justify-content: space-between; align-items: center; }
-.compare-form { margin-bottom: 16px; }
-.compare-table-wrap { margin-top: 12px; }
-.detail-loading { padding: 20px; text-align: center; color: #909399; }
-.detail-content { padding: 0 8px; }
-.detail-content h4 { margin: 12px 0 8px 0; font-size: 14px; }
-.mt { margin-top: 12px; }
+@media (max-width: 768px) {
+  .all-scoring-records-page {
+    padding: 10px;
+  }
+  .page-header {
+    padding: 15px;
+  }
+  .header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .compare-form :deep(.el-select) {
+    width: 100% !important;
+  }
+  .hidden-mobile {
+    display: none !important;
+  }
+  :deep(.el-table) {
+    font-size: 12px;
+  }
+  :deep(.el-drawer) {
+    width: 95% !important;
+  }
+}
 </style>

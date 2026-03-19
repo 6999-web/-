@@ -87,5 +87,12 @@ const negativeRows = [
   :deep(.el-table) {
     font-size: 12px;
   }
+  .rules-table :deep(.el-table__body-wrapper) {
+    overflow-x: auto;
+  }
+  :deep(.el-table-column--category) {
+    display: block;
+    width: 100% !important;
+  }
 }
 </style>

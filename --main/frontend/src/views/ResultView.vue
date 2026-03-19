@@ -619,5 +619,28 @@ const downloadFile = (att: any) => {
   .el-card :deep(.el-card__body) {
     padding: 15px;
   }
+
+  .score-card {
+    border-radius: 20px !important;
+  }
+
+  .final-score-display {
+    margin: 15px 0;
+  }
+
+  .score-value {
+    font-size: 56px;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+  }
+
+  .details-card {
+    border-radius: 16px !important;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .details-card:active {
+    transform: scale(0.98);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1) !important;
+  }
 }
 </style>

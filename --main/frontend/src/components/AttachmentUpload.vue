@@ -611,139 +611,42 @@ defineExpose({
 </script>
 
 <style scoped>
-.attachment-upload {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.upload-card {
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.card-header h2 {
-  margin: 0;
-  font-size: 20px;
-  color: #303133;
-}
-
-.indicator-table-section {
-  margin-bottom: 30px;
-}
-
-.indicator-table-section h3 {
-  margin: 0 0 15px 0;
-  font-size: 16px;
-  color: #303133;
-}
-
-.indicator-table {
-  width: 100%;
-}
-
-.file-types {
-  font-size: 12px;
-  color: #606266;
-}
-
-.upload-section {
-  margin-bottom: 30px;
-  padding-top: 20px;
-  border-top: 1px solid #e4e7ed;
-}
-
-.upload-section h3 {
-  margin: 0 0 20px 0;
-  font-size: 16px;
-  color: #303133;
-}
-
-.upload-form {
-  max-width: 800px;
-}
-
-.upload-component {
-  width: 100%;
-}
-
-.upload-component :deep(.el-upload-dragger) {
-  width: 100%;
-  padding: 40px;
-}
-
-.el-upload__tip {
-  margin-top: 10px;
-  line-height: 1.6;
-}
-
-.el-upload__tip p {
-  margin: 5px 0;
-  font-size: 13px;
-  color: #606266;
-}
-
-.warning-text {
-  color: #e6a23c;
-  font-weight: 500;
-}
-
-.progress-list {
-  width: 100%;
-}
-
-.progress-item {
-  margin-bottom: 15px;
-}
-
-.progress-info {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 5px;
-}
-
-.file-name {
-  font-size: 14px;
-  color: #303133;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  flex: 1;
-  margin-right: 10px;
-}
-
-.progress-percentage {
-  font-size: 14px;
-  color: #606266;
-  font-weight: 500;
-}
-
-.uploaded-section {
-  margin-bottom: 30px;
-  padding-top: 20px;
-  border-top: 1px solid #e4e7ed;
-}
-
-.uploaded-section h3 {
-  margin: 0 0 15px 0;
-  font-size: 16px;
-  color: #303133;
-}
-
-.action-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  padding-top: 20px;
-  border-top: 1px solid #e4e7ed;
-}
-
-.lock-alert {
-  margin-top: 20px;
+@media (max-width: 768px) {
+  .attachment-upload {
+    padding: 10px;
+  }
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .upload-form {
+    padding-left: 0;
+  }
+  :deep(.el-form-item) {
+    display: block;
+  }
+  :deep(.el-form-item__label) {
+    text-align: left;
+    margin-bottom: 5px;
+    width: 100% !important;
+  }
+  :deep(.el-upload-dragger) {
+    padding: 20px !important;
+  }
+  .hidden-mobile {
+    display: none !important;
+  }
+  :deep(.el-table) {
+    font-size: 12px;
+  }
+  .action-buttons {
+    flex-direction: column-reverse;
+    gap: 10px;
+  }
+  .action-buttons .el-button {
+    width: 100%;
+    margin-left: 0 !important;
+  }
 }
 </style>

@@ -47,16 +47,19 @@
           </el-table-column>
           <el-table-column
             prop="submitted_at"
-            label="提交时间"
-            width="180"
+            label="时间"
+            width="120"
+            align="center"
+            class-name="hidden-mobile"
           >
             <template #default="scope">
-              {{ scope.row.submitted_at ? formatDate(scope.row.submitted_at) : '-' }}
+              {{ scope.row.submitted_at ? formatDate(scope.row.submitted_at).split(' ')[0] : '-' }}
             </template>
           </el-table-column>
           <el-table-column
             label="操作"
-            width="150"
+            width="100"
+            align="center"
           >
             <template #default="scope">
               <el-button
@@ -410,6 +413,10 @@ const formatDate = (date: string | number | Date): string => {
   
   .selection-card :deep(.el-card__header) h2 {
     font-size: 16px;
+  }
+
+  .hidden-mobile {
+    display: none !important;
   }
 }
 </style>

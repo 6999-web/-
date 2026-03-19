@@ -253,7 +253,7 @@
           <el-table-column
             prop="status"
             label="状态"
-            width="120"
+            width="100"
             align="center"
           >
             <template #default="{ row }">
@@ -267,6 +267,7 @@
             label="公示时间"
             width="180"
             align="center"
+            class-name="hidden-mobile"
           >
             <template #default="{ row }">
               {{ row.published_at ? formatDate(row.published_at) : '-' }}
@@ -274,7 +275,7 @@
           </el-table-column>
           <el-table-column
             label="操作"
-            width="180"
+            width="100"
             align="center"
             fixed="right"
           >
@@ -285,16 +286,7 @@
                 link
                 @click="viewDetail(row)"
               >
-                查看详情
-              </el-button>
-              <el-button
-                v-if="row.approval_status === 'rejected'"
-                type="warning"
-                size="small"
-                link
-                @click="viewRejectReason(row)"
-              >
-                驳回原因
+                详情
               </el-button>
             </template>
           </el-table-column>
@@ -836,6 +828,44 @@ const formatDate = (dateStr: string): string => {
     flex-wrap: wrap;
     justify-content: center;
     gap: 5px;
+  }
+@media (max-width: 768px) {
+  .page-content {
+    padding: 0;
+  }
+
+  .stat-card {
+    margin-bottom: 12px;
+    border-radius: 16px;
+    padding: 15px;
+    transition: transform 0.2s;
+  }
+
+  .stat-card:active {
+    transform: scale(0.97);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+
+  .stat-value {
+    font-size: 20px !important;
+    font-weight: bold;
+  }
+
+  :deep(.hidden-mobile) {
+    display: none !important;
+  }
+
+  :deep(.el-table__fixed-right) {
+    height: 100% !important;
+  }
+
+  .filter-card {
+    margin-bottom: 10px;
+    border-radius: 12px;
+  }
+
+  .summary-card {
+    border-radius: 16px;
   }
 }
 </style>

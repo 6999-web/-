@@ -31,7 +31,7 @@
               <el-input
                 v-model="formData.regularTeaching.teachingProcessManagement.content"
                 type="textarea"
-                :rows="4"
+                :autosize="{ minRows: 3, maxRows: 10 }"
                 placeholder="制定年度教研室工作计划，并采取有效措施保证计划落实，各个教学环节的正常运转。落实集体备课制度，按规定选用教材，完成指导毕业生的毕业实习、毕业论文（设计）及答辩工作。"
                 maxlength="1000"
                 show-word-limit
@@ -2500,24 +2500,61 @@ defineExpose({
 }
 
 @media (max-width: 768px) {
+  .new-self-evaluation-form {
+    padding-bottom: 80px; /* 为底部操作栏留出空间，防止键盘遮挡 */
+  }
+
+  :deep(.el-divider) {
+    margin: 24px -20px 20px -20px;
+    width: calc(100% + 40px);
+    background-color: #f0f2f5;
+    border: none;
+    height: auto;
+    padding: 10px 20px;
+  }
+
+  :deep(.el-divider__text) {
+    background-color: transparent !important;
+    position: static;
+    transform: none;
+    padding: 0;
+  }
+
   .section-title {
     font-size: 16px;
+    margin: 0;
+    color: #1e3a5f;
   }
+
   .card-header h2 {
     font-size: 18px;
   }
+
   .content-with-attachment {
     flex-direction: column;
-    gap: 10px;
+    gap: 15px;
   }
+
+  .content-section {
+    width: 100%;
+  }
+
+  .attachment-section {
+    width: 100%;
+    margin-top: 10px;
+  }
+
   .score-input-row {
-    flex-wrap: wrap;
-    gap: 5px;
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 10px;
+    margin-top: 10px;
   }
-  .el-divider__text {
-    font-size: 14px;
-    padding: 0 5px;
+
+  .score-input-row .el-input-number {
+    width: 100%;
   }
+
   .summary-card :deep(.el-descriptions__cell) {
     display: block;
   }

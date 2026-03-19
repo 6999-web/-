@@ -855,4 +855,75 @@ defineExpose({
   color: #909399;
   line-height: 1.5;
 }
+
+@media (max-width: 768px) {
+  .anomaly-handling {
+    padding: 10px;
+  }
+  
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 15px;
+  }
+  
+  .header-actions {
+    width: 100%;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .header-actions .el-select, 
+  .header-actions .el-button {
+    width: 100% !important;
+    margin-right: 0 !important;
+  }
+  
+  .count-comparison {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+  }
+  
+  .count-item {
+    width: 100%;
+    padding: 15px;
+  }
+  
+  .count-divider {
+    transform: rotate(90deg);
+  }
+  
+  .anomaly-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .button-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .button-group .el-button {
+    width: 100%;
+    margin-left: 0 !important;
+  }
+  
+  :deep(.el-dialog) {
+    width: 95% !important;
+    margin-top: 5vh !important;
+  }
+  
+  :deep(.el-form-item) {
+    flex-direction: column;
+    align-items: flex-start !important;
+  }
+  
+  :deep(.el-form-item__label) {
+    width: 100% !important;
+    text-align: left !important;
+    margin-bottom: 5px;
+  }
+}
 </style>

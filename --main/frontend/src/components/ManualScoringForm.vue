@@ -1571,4 +1571,56 @@ defineExpose({
   font-weight: bold;
   font-size: 20px;
 }
+
+@media (max-width: 768px) {
+  .integrated-scoring {
+    padding: 0;
+  }
+  
+  .content-item-with-scoring {
+    flex-direction: column;
+    padding: 10px;
+    gap: 15px;
+  }
+  
+  .item-content-area, .scoring-area {
+    width: 100% !important;
+    padding: 0 !important;
+  }
+
+  .scoring-area {
+    border-top: 1px dashed #ddd;
+    padding-top: 15px !important;
+  }
+
+  .el-form-item {
+    flex-direction: column;
+    align-items: flex-start !important;
+  }
+  
+  :deep(.el-form-item__label) {
+    width: 100% !important;
+    margin-bottom: 5px;
+  }
+  
+  :deep(.el-input-number) {
+    width: 140px !important;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .form-actions .el-button {
+    width: 100%;
+    margin-left: 0 !important;
+  }
+
+  .score-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
 </style>

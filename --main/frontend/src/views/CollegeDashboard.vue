@@ -113,6 +113,13 @@ onMounted(async () => {
   margin-bottom: 1.5rem;
 }
 
+@media (max-width: 768px) {
+  .metrics-cards {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
 .metric-card {
   flex: 1;
   min-width: 200px;
@@ -148,12 +155,17 @@ onMounted(async () => {
 
 @media (max-width: 500px) {
   .label {
-    width: 100%;
-    text-align: left;
+    width: 100% !important;
+    text-align: left !important;
     margin-bottom: 5px;
   }
   .bar-container {
     width: 80%;
+  }
+  .score {
+    width: 20%;
+    margin-left: 0;
+    text-align: right;
   }
 }
 
@@ -181,5 +193,17 @@ onMounted(async () => {
 .chart-card, .weakness-card {
   margin-bottom: 1.5rem;
   border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  :deep(.el-table) {
+    font-size: 12px;
+  }
+  .content-container {
+    overflow-x: hidden;
+  }
+  .weakness-card :deep(.el-table__body-wrapper) {
+    overflow-x: auto;
+  }
 }
 </style>

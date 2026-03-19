@@ -37,7 +37,7 @@
                 </el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="handled_at" label="处理时间" width="170">
+            <el-table-column prop="handled_at" label="时间" width="160" class-name="hidden-mobile">
               <template #default="{ row }">{{ formatTime(row.handled_at) }}</template>
             </el-table-column>
           </el-table>
@@ -181,24 +181,33 @@ onMounted(() => loadAnomalies())
 </script>
 
 <style scoped>
-.anomaly-records-page { min-height: 100vh; background: #f5f7fa; padding: 20px; }
-.page-header { margin-bottom: 20px; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
-.page-header .header-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
-.page-header .header-row h1 { margin: 0; font-size: 24px; color: #303133; }
-.page-header .el-breadcrumb { margin-bottom: 8px; }
-.back-home-link { color: #409eff; text-decoration: none; font-size: 14px; }
-.back-home-link:hover { text-decoration: underline; }
-.page-header h1 { margin: 0 0 8px 0; font-size: 24px; color: #303133; }
-.page-description { margin: 0; color: #606266; font-size: 14px; }
-.content-tabs { max-width: 1200px; margin: 0 auto; }
-.card { margin-bottom: 20px; }
-.card .el-card__header { display: flex; justify-content: space-between; align-items: center; }
-.stats-row { margin-bottom: 24px; }
-.stat-box { text-align: center; padding: 20px; background: #f0f9ff; border-radius: 8px; }
-.stat-box .stat-value { font-size: 28px; font-weight: 600; color: #409eff; }
-.stat-box.warning .stat-value { color: #e6a23c; }
-.stat-box.success .stat-value { color: #67c23a; }
-.stat-box.info .stat-value { color: #909399; }
-.stat-label { font-size: 13px; color: #606266; margin-top: 4px; }
-h4 { margin: 16px 0 8px 0; font-size: 14px; }
+@media (max-width: 768px) {
+  .anomaly-records-page {
+    padding: 10px;
+  }
+  .page-header {
+    padding: 15px;
+  }
+  .header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .stats-row .el-col {
+    width: 50% !important;
+    margin-bottom: 10px;
+  }
+  .stat-box {
+    padding: 15px;
+  }
+  .stat-box .stat-value {
+    font-size: 20px;
+  }
+  .hidden-mobile {
+    display: none !important;
+  }
+  :deep(.el-table) {
+    font-size: 12px;
+  }
+}
 </style>

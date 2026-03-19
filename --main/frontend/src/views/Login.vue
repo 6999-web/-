@@ -112,8 +112,8 @@
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="showLoginDialog = false">取消</el-button>
-          <el-button type="primary" @click="handleLogin" :loading="loginLoading">
+          <el-button @click="showLoginDialog = false" class="footer-btn">取消</el-button>
+          <el-button type="primary" @click="handleLogin" :loading="loginLoading" class="footer-btn">
             登录
           </el-button>
         </span>
@@ -465,36 +465,68 @@ const handleLogin = async () => {
     padding: 1.5rem;
     min-height: auto;
     border-radius: 20px;
+    margin-bottom: 1rem;
   }
   
   .card-icon {
-    width: 50px;
-    height: 50px;
-    font-size: 1.5rem;
+    width: 60px;
+    height: 60px;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
   }
   
   .card-title {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
   }
   
   .card-desc {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     margin-bottom: 1rem;
   }
   
   .feature-tag {
-    padding: 0.3rem 0.8rem;
-    font-size: 0.8rem;
+    padding: 0.35rem 0.9rem;
+    font-size: 0.85rem;
   }
 }
 
 @media (max-width: 480px) {
   .title {
-    font-size: 1.6rem;
+    font-size: 1.8rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .subtitle {
+    font-size: 0.85rem;
+  }
+  
+  .dialog-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .dialog-footer .footer-btn {
+    width: 100%;
+    margin-left: 0 !important;
   }
   
   :deep(.el-dialog) {
     width: 90% !important;
+    margin-top: 20vh !important;
+  }
+
+  .logo-wrapper {
+    width: 80px;
+    height: 80px;
+    border-radius: 16px;
+  }
+
+  .logo {
+    width: 60px;
+    height: 60px;
   }
 }
 

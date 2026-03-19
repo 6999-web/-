@@ -103,11 +103,13 @@
         
         <el-table-column
           prop="evaluation_year"
-          label="考核年度"
-          width="100"
+          label="年度"
+          width="80"
+          align="center"
+          class-name="hidden-mobile"
         >
           <template #default="{ row }">
-            {{ row.evaluation_year }}年
+            {{ row.evaluation_year }}
           </template>
         </el-table-column>
 
@@ -121,8 +123,9 @@
         </el-table-column>
 
         <el-table-column
-          label="上传时间"
-          width="180"
+          label="时间"
+          width="160"
+          class-name="hidden-mobile"
         >
           <template #default="{ row }">
             {{ formatDate(row.uploaded_at) }}
@@ -348,72 +351,32 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.attachment-management-view {
-  min-height: 100vh;
-  background-color: #f5f7fa;
-  padding: 20px;
-}
-
-.header-card {
-  margin-bottom: 20px;
-}
-
-.header-content {
-  text-align: left;
-}
-
-.header-content .header-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.header-content .header-row h2 {
-  margin: 0;
-}
-
-.back-home-link {
-  color: #409eff;
-  text-decoration: none;
-  font-size: 14px;
-}
-.back-home-link:hover {
-  text-decoration: underline;
-}
-
-.header-content h2 {
-  margin: 0 0 10px 0;
-  color: #303133;
-  font-size: 24px;
-}
-
-.subtitle {
-  margin: 0;
-  color: #909399;
-  font-size: 14px;
-}
-
-.filter-card {
-  margin-bottom: 20px;
-}
-
-.filter-form {
-  margin: 0;
-}
-
-.content-card {
-  min-height: 400px;
-}
-
-.empty-state {
-  padding: 40px 0;
-  text-align: center;
-}
-
-.pagination-container {
-  margin-top: 20px;
-  display: flex;
-  justify-content: flex-end;
+@media (max-width: 768px) {
+  .attachment-management-view {
+    padding: 10px;
+  }
+  .header-content .header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .filter-form :deep(.el-form-item) {
+    display: block;
+    margin-right: 0;
+  }
+  .filter-form :deep(.el-input),
+  .filter-form :deep(.el-select) {
+    width: 100% !important;
+  }
+  .hidden-mobile {
+    display: none !important;
+  }
+  :deep(.el-table) {
+    font-size: 12px;
+  }
+  .pagination-container {
+    justify-content: center;
+    overflow-x: auto;
+  }
 }
 </style>

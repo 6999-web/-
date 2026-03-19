@@ -37,11 +37,14 @@
             <span class="user-name">{{ authStore.userName }}</span>
             <span class="user-role-text">{{ authStore.roleName }}</span>
           </div>
+          <el-button 
+            type="danger" 
+            :icon="SwitchButton" 
+            link 
+            class="logout-icon-btn"
+            @click="handleLogout"
+          />
         </div>
-        <el-button class="logout-btn" @click="handleLogout" text>
-          <el-icon><SwitchButton /></el-icon>
-          退出登录
-        </el-button>
       </div>
       </div>
     </div>
@@ -439,15 +442,14 @@ const handleLogout = () => {
   color: rgba(255, 255, 255, 0.7);
 }
 
-.logout-btn {
-  width: 100%;
-  color: rgba(255, 255, 255, 0.8);
-  margin-top: 0.5rem;
+.logout-icon-btn {
+  margin-left: auto;
+  color: #ff4d4f;
+  font-size: 1.2rem;
 }
 
-.logout-btn:hover {
-  color: white;
-  background: rgba(255, 255, 255, 0.1);
+.logout-icon-btn:hover {
+  color: #ff7875;
 }
 
 .main-content {
@@ -456,6 +458,7 @@ const handleLogout = () => {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  transition: margin-left 0.3s ease;
 }
 
 .content-tabs {
@@ -653,6 +656,7 @@ const handleLogout = () => {
 
   .main-content {
     margin-left: 0;
+    padding-top: 0;
   }
 
   .sidebar-title,
@@ -663,17 +667,32 @@ const handleLogout = () => {
   }
 
   .content-tabs {
-    padding: 0 1rem;
+    padding: 0 0.5rem;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
   }
   
+  .tab-item {
+    padding: 0.75rem 1rem;
+    flex-shrink: 0;
+  }
+
   .content-area {
-    padding: 1.5rem 1rem;
+    padding: 1rem;
   }
   
   .content-title {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
+  }
+
+  .user-info {
+    padding: 0.5rem;
+    gap: 5px;
+  }
+
+  .logout-icon-btn {
+    font-size: 1.1rem;
   }
 }
 

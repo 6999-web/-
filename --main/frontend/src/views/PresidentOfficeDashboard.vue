@@ -11,8 +11,9 @@
     <!-- Filters -->
     <el-card class="filter-card">
       <el-form
-        :inline="true"
+        :inline="!isMobile"
         :model="filters"
+        class="responsive-filter-form"
       >
         <el-form-item label="考核年度">
           <el-select
@@ -210,6 +211,7 @@
           <el-table-column
             label="评审人评分"
             min-width="300"
+            class-name="hidden-mobile"
           >
             <template #default="scope">
               <div
@@ -248,10 +250,10 @@
           <el-table-column
             prop="status"
             label="状态"
-            width="120"
+            width="100"
           >
             <template #default="scope">
-              <el-tag :type="getStatusType(scope.row.status)">
+              <el-tag :type="getStatusType(scope.row.status)" size="small">
                 {{ getStatusLabel(scope.row.status) }}
               </el-tag>
             </template>
@@ -616,13 +618,26 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { Loading, HomeFilled } from '@element-plus/icons-vue'
 import { presidentOfficeApi } from '@/api/client'
 import type { TeachingOfficeScore, DashboardData, DashboardFilters, ApprovalRequest } from '@/types/presidentOffice'
 import { EVALUATION_INDICATORS } from '@/types/scoring'
+
+const isMobile = ref(window.innerWidth <= 768)
+const handleResize = () => {
+  isMobile.value = window.innerWidth <= 768
+}
+
+onMounted(() => {
+  window.addEventListener('resize', handleResize)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize)
+})
 
 // Data
 const router = useRouter()
@@ -1171,5 +1186,56 @@ onMounted(() => {
 
 .selected-office-item:last-child {
   margin-bottom: 0;
+}
+@media (max-width: 768px) {
+  .dashboard-header-container {
+    padding: 10px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  .subtitle {
+    font-size: 0.85rem;
+  }
+
+  .responsive-filter-form :deep(.el-form-item) {
+    display: block;
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .stat-card {
+    padding: 10px;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+  }
+
+  .chart-container {
+    height: 300px;
+  }
+
+  .bar-label {
+    width: 60px;
+    font-size: 0.8rem;
+  }
+
+  .hidden-mobile {
+    display: none !important;
+  }
+
+  .el-dialog {
+    width: 95% !important;
+  }
+
+  .summary-cards .el-col {
+    margin-bottom: 15px;
+  }
 }
 </style>
