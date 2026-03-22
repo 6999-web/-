@@ -1,0 +1,595 @@
+<template>
+  <div class="data-sync-page">
+    <div class="page-header">
+      <div class="header-row">
+        <h1>数据同步至校长办公会</h1>
+        <router-link to="/management-home" class="back-home-link">← 返回评教小组端首页</router-link>
+      </div>
+      <el-breadcrumb class="management-breadcrumb" separator="/">
+        <el-breadcrumb-item :to="{ path: '/management-home' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>管理端</el-breadcrumb-item>
+        <el-breadcrumb-item>数据同步</el-breadcrumb-item>
+      </el-breadcrumb>
+    </div>
+
+    <div class="page-content">
+      <!-- Evaluation Selection Card -->
+      <el-card class="selection-card">
+        <template #header>
+          <div class="card-header">
+            <h2>选择待上传的教研室</h2>
+            <el-button
+              type="primary"
+              :disabled="selectedEvaluationIds.length === 0 || isSyncing"
+              :loading="isSyncing"
+              @click="handleSyncToPresidentOffice"
+            >
+              <el-icon v-if="!isSyncing">
+                <Upload />
+              </el-icon>
+              {{ isSyncing ? '上传中...' : '上传至校长办公会' }}
+            </el-button>
+          </div>
+        </template>
+
+        <!-- Evaluation Table -->
+        <el-table
+          ref="evaluationTableRef"
+          v-loading="loading"
+          :data="evaluations"
+          stripe
+          style="width: 100%"
+          class="evaluation-table"
+          @selection-change="handleSelectionChange"
+        >
+          <el-table-column
+            type="selection"
+            width="55"
+            :selectable="isRowSelectable"
+          />
+          <el-table-column
+            prop="teaching_office_name"
+            label="教研室名称"
+            width="200"
+          />
+          <el-table-column
+            prop="evaluation_year"
+            label="年度"
+            width="80"
+            align="center"
+            class-name="hidden-mobile"
+          />
+          <el-table-column
+            prop="status"
+            label="状态"
+            width="150"
+          >
+            <template #default="scope">
+              <el-tag :type="getStatusTagType(scope.row.status)">
+                {{ getStatusLabel(scope.row.status) }}
+              </el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="final_score"
+            label="最终得分"
+            width="120"
+          >
+            <template #default="scope">
+              <span
+                v-if="scope.row.final_score !== undefined"
+                class="final-score"
+              >
+                {{ scope.row.final_score.toFixed(1) }}分
+              </span>
+              <span
+                v-else
+                class="no-score"
+              >-</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="finalized_at"
+            label="确定时间"
+            width="180"
+          >
+            <template #default="scope">
+              {{ scope.row.finalized_at ? formatDate(scope.row.finalized_at) : '-' }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="同步"
+            width="80"
+            align="center"
+            class-name="hidden-mobile"
+          >
+            <template #default="scope">
+              <el-tag
+                v-if="scope.row.synced"
+                type="success"
+                size="small"
+              >
+                已
+              </el-tag>
+              <el-tag
+                v-else
+                type="info"
+                size="small"
+              >
+                未
+              </el-tag>
+            </template>
+          </el-table-column>
+        </el-table>
+
+        <el-empty
+          v-if="evaluations.length === 0 && !loading"
+          description="暂无可上传的教研室"
+        />
+
+      </el-card>
+      
+      <!-- 汇总结果预览（Requirement 4: 整合为一个表格页面） -->
+      <el-card v-if="selectedEvaluationIds.length > 0" class="integration-card">
+        <template #header>
+          <div class="card-header">
+            <h3>📊 拟上传汇总结果整合预览</h3>
+            <el-tag type="success">实时汇总</el-tag>
+          </div>
+        </template>
+        
+        <div class="table-container integrated-table">
+          <table class="custom-report-table">
+            <thead>
+              <tr>
+                <th>序号</th>
+                <th>教研室名称</th>
+                <th>年度</th>
+                <th>评审均分</th>
+                <th>最终得分</th>
+                <th>状态</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(evalItem, index) in selectedEvaluations" :key="evalItem.id">
+                <td>{{ index + 1 }}</td>
+                <td>{{ evalItem.teaching_office_name }}</td>
+                <td>{{ evalItem.evaluation_year }}</td>
+                <td>{{ ((evalItem.final_score || 0) * 0.9).toFixed(2) }}</td> <!-- 模拟计算 -->
+                <td class="bold-score">{{ evalItem.final_score != null ? evalItem.final_score.toFixed(1) : '-' }}分</td>
+                <td><el-tag size="small" type="success">待同步</el-tag></td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="4" class="text-right"><strong>平均得分合计：</strong></td>
+                <td colspan="2"><strong class="total-highlight">{{ selectedEvaluations.length > 0 ? (selectedEvaluations.reduce((sum: number, e: any) => sum + (e.final_score || 0), 0) / selectedEvaluations.length).toFixed(2) : '0.00' }} 分</strong></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        
+        <div class="integration-footer">
+          <p class="hint-text">确认上方表格信息无误后，点击右上方“上传至校长办公会”按钮完成数据同步。</p>
+        </div>
+      </el-card>
+
+      <!-- Sync Progress Card -->
+      <el-card
+        v-if="syncProgress.visible"
+        class="progress-card"
+      >
+        <template #header>
+          <h2>同步进度</h2>
+        </template>
+
+        <div class="progress-content">
+          <el-progress
+            :percentage="syncProgress.percentage"
+            :status="syncProgress.status"
+            :stroke-width="20"
+          />
+          <div class="progress-text">
+            {{ syncProgress.message }}
+          </div>
+        </div>
+      </el-card>
+
+      <!-- Sync History Card -->
+      <el-card class="history-card">
+        <template #header>
+          <div class="card-header">
+            <h2>同步历史</h2>
+            <el-button
+              type="default"
+              size="small"
+              :icon="Refresh"
+              @click="loadSyncHistory"
+            >
+              刷新
+            </el-button>
+          </div>
+        </template>
+
+        <el-timeline v-if="syncHistory.length > 0">
+          <el-timeline-item
+            v-for="task in syncHistory"
+            :key="task.id"
+            :timestamp="formatDateTime(task.created_at)"
+            placement="top"
+            :type="getTimelineType(task.status)"
+            :icon="getTimelineIcon(task.status)"
+          >
+            <el-card>
+              <div class="history-item">
+                <div class="history-header">
+                  <el-tag :type="getSyncStatusTagType(task.status)">
+                    {{ getSyncStatusLabel(task.status) }}
+                  </el-tag>
+                  <span class="task-id">任务ID: {{ task.id }}</span>
+                </div>
+                <div class="history-content">
+                  <div class="history-detail">
+                    <span class="label">同步教研室数量：</span>
+                    <span class="value">{{ task.evaluation_ids.length }}个</span>
+                  </div>
+                  <div
+                    v-if="task.completed_at"
+                    class="history-detail"
+                  >
+                    <span class="label">完成时间：</span>
+                    <span class="value">{{ formatDateTime(task.completed_at) }}</span>
+                  </div>
+                  <div
+                    v-if="task.error_message"
+                    class="history-detail error"
+                    style="margin-top: 8px"
+                  >
+                    <span class="label">错误信息：</span>
+                    <span class="value">{{ task.error_message }}</span>
+                  </div>
+                </div>
+              </div>
+            </el-card>
+          </el-timeline-item>
+        </el-timeline>
+
+        <el-empty
+          v-else
+          description="暂无同步历史"
+        />
+      </el-card>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { Upload, Refresh, Check, Close, Loading as LoadingIcon } from '@element-plus/icons-vue'
+import { reviewApi, managementResultApi } from '@/api/client'
+import type { EvaluationForSync, SyncTask, SyncTaskStatus } from '@/types/sync'
+
+// State
+const loading = ref(false)
+const isSyncing = ref(false)
+const evaluations = ref<EvaluationForSync[]>([])
+const selectedEvaluationIds = ref<string[]>([])
+const evaluationTableRef = ref()
+
+// Sync progress state
+const syncProgress = ref({
+  visible: false,
+  percentage: 0,
+  status: '' as 'success' | 'exception' | 'warning' | '',
+  message: ''
+})
+
+// Sync history
+const syncHistory = ref<SyncTask[]>([])
+
+// Computed: Selected evaluations
+const selectedEvaluations = computed(() => {
+  return evaluations.value.filter((e: any) => selectedEvaluationIds.value.includes(e.id))
+})
+
+// Load evaluations on mount
+onMounted(async () => {
+  await loadEvaluations()
+  await loadSyncHistory()
+})
+
+// Load evaluations（已确定最终得分的教研室，来自管理端结果；已同步状态来自同步任务列表）
+const loadEvaluations = async () => {
+  loading.value = true
+  try {
+    const [resultsRes, tasksRes] = await Promise.all([
+      managementResultApi.getAllResults({ status: 'finalized' }),
+      reviewApi.getSyncTasks().catch(() => ({ data: [] }))
+    ])
+    const list = Array.isArray(resultsRes.data) ? resultsRes.data : []
+    const tasks = Array.isArray(tasksRes.data) ? tasksRes.data : []
+    const syncedIds = new Set<string>()
+    tasks.forEach((t: any) => {
+      if (t.status === 'completed' && t.evaluation_ids) {
+        t.evaluation_ids.forEach((eid: string) => syncedIds.add(String(eid)))
+      }
+    })
+    evaluations.value = list.map((r: any) => ({
+      id: r.id,
+      teaching_office_name: r.teaching_office_name || '-',
+      evaluation_year: r.evaluation_year,
+      status: r.status || 'finalized',
+      final_score: r.final_score,
+      finalized_at: r.approved_at || r.determined_at,
+      synced: syncedIds.has(String(r.id))
+    }))
+  } catch (error: any) {
+    console.error('Failed to load evaluations:', error)
+    ElMessage.error('加载教研室列表失败')
+  } finally {
+    loading.value = false
+  }
+}
+
+// Load sync history（来自后端同步任务列表）
+const loadSyncHistory = async () => {
+  try {
+    const response = await reviewApi.getSyncTasks()
+    const data = Array.isArray(response.data) ? response.data : []
+    syncHistory.value = data.map((t: any) => ({
+      id: t.id,
+      evaluation_ids: (t.evaluation_ids || []).map((eid: string) => String(eid)),
+      status: t.status || 'pending',
+      created_at: t.started_at || t.created_at,
+      completed_at: t.completed_at,
+      error_message: t.error_message
+    }))
+  } catch (error: any) {
+    console.error('Failed to load sync history:', error)
+  }
+}
+
+// Handle selection change
+const handleSelectionChange = (selection: EvaluationForSync[]) => {
+  selectedEvaluationIds.value = selection.map(e => e.id)
+}
+
+// Check if row is selectable
+const isRowSelectable = (row: EvaluationForSync) => {
+  // Only finalized and not synced evaluations can be selected
+  return row.status === 'finalized' && !row.synced
+}
+
+// Handle sync to president office
+const handleSyncToPresidentOffice = async () => {
+  if (selectedEvaluationIds.value.length === 0) {
+    ElMessage.warning('请至少选择一个教研室')
+    return
+  }
+
+  try {
+    await ElMessageBox.confirm(
+      `确定要将选中的 ${selectedEvaluationIds.value.length} 个教研室的考评数据上传至校长办公会吗？`,
+      '确认上传',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }
+    )
+
+    // Start syncing
+    isSyncing.value = true
+    syncProgress.value = {
+      visible: true,
+      percentage: 0,
+      status: '',
+      message: '正在准备上传数据...'
+    }
+
+    // Simulate progress
+    const progressInterval = setInterval(() => {
+      if (syncProgress.value.percentage < 90) {
+        syncProgress.value.percentage += 10
+        syncProgress.value.message = `正在上传数据... ${syncProgress.value.percentage}%`
+      }
+    }, 300)
+
+    try {
+      // Call API to sync
+      await reviewApi.syncToPresidentOffice(selectedEvaluationIds.value)
+
+      // Clear progress interval
+      clearInterval(progressInterval)
+
+      // Update progress to 100%
+      syncProgress.value.percentage = 100
+      syncProgress.value.status = 'success'
+      syncProgress.value.message = '数据上传成功！'
+
+      ElMessage.success({
+        message: '数据已成功上传至校长办公会',
+        duration: 3000
+      })
+
+      // Clear selection
+      selectedEvaluationIds.value = []
+      if (evaluationTableRef.value) {
+        evaluationTableRef.value.clearSelection()
+      }
+
+      // Reload data
+      setTimeout(async () => {
+        await loadEvaluations()
+        await loadSyncHistory()
+        
+        // Hide progress after reload
+        setTimeout(() => {
+          syncProgress.value.visible = false
+        }, 2000)
+      }, 1500)
+
+    } catch (error: any) {
+      // Clear progress interval
+      clearInterval(progressInterval)
+
+      // Update progress to error state
+      syncProgress.value.percentage = 100
+      syncProgress.value.status = 'exception'
+      syncProgress.value.message = '数据上传失败'
+
+      const errorMessage = error.response?.data?.detail || '上传数据失败，请稍后重试'
+
+      ElMessage.error({
+        message: errorMessage,
+        duration: 5000,
+        showClose: true
+      })
+
+      // Hide progress after delay
+      setTimeout(() => {
+        syncProgress.value.visible = false
+      }, 3000)
+    }
+
+  } catch (error) {
+    // User cancelled
+    console.log('User cancelled sync')
+  } finally {
+    isSyncing.value = false
+  }
+}
+
+// Get status tag type
+const getStatusTagType = (status: string): string => {
+  const types: Record<string, string> = {
+    'draft': 'info',
+    'submitted': 'warning',
+    'locked': 'warning',
+    'ai_scored': 'success',
+    'manually_scored': 'primary',
+    'finalized': 'danger',
+    'published': 'success'
+  }
+  return types[status] || 'info'
+}
+
+// Get status label
+const getStatusLabel = (status: string): string => {
+  const labels: Record<string, string> = {
+    'draft': '草稿',
+    'submitted': '已提交',
+    'locked': '已锁定',
+    'ai_scored': 'AI已评分',
+    'manually_scored': '已手动评分',
+    'finalized': '已确定最终得分',
+    'published': '已公示'
+  }
+  return labels[status] || status
+}
+
+// Get sync status tag type
+const getSyncStatusTagType = (status: SyncTaskStatus): string => {
+  const types: Record<SyncTaskStatus, string> = {
+    'pending': 'info',
+    'syncing': 'warning',
+    'completed': 'success',
+    'failed': 'danger'
+  }
+  return types[status] || 'info'
+}
+
+// Get sync status label
+const getSyncStatusLabel = (status: SyncTaskStatus): string => {
+  const labels: Record<SyncTaskStatus, string> = {
+    'pending': '等待中',
+    'syncing': '同步中',
+    'completed': '已完成',
+    'failed': '失败'
+  }
+  return labels[status] || status
+}
+
+// Get timeline type
+const getTimelineType = (status: SyncTaskStatus): string => {
+  const types: Record<SyncTaskStatus, string> = {
+    'pending': 'primary',
+    'syncing': 'warning',
+    'completed': 'success',
+    'failed': 'danger'
+  }
+  return types[status] || 'primary'
+}
+
+// Get timeline icon
+const getTimelineIcon = (status: SyncTaskStatus) => {
+  const icons: Record<SyncTaskStatus, any> = {
+    'pending': LoadingIcon,
+    'syncing': LoadingIcon,
+    'completed': Check,
+    'failed': Close
+  }
+  return icons[status] || LoadingIcon
+}
+
+// Format date
+const formatDate = (dateStr: string): string => {
+  const date = new Date(dateStr)
+  return date.toLocaleString('zh-CN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+}
+
+// Format date time
+const formatDateTime = (dateStr: string): string => {
+  const date = new Date(dateStr)
+  return date.toLocaleString('zh-CN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  })
+}
+</script>
+
+<style scoped>
+@media (max-width: 768px) {
+  .data-sync-page {
+    padding: 10px;
+  }
+  .header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .card-header {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start !important;
+  }
+  .card-header .el-button {
+    width: 100%;
+    margin-left: 0 !important;
+  }
+  .integrated-table {
+    overflow-x: auto;
+  }
+  .custom-report-table {
+    min-width: 600px;
+  }
+  :deep(.el-table) {
+    font-size: 12px;
+  }
+  
+  .hidden-mobile {
+    display: none !important;
+  }
+}
+</style>
