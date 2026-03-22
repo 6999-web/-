@@ -324,13 +324,10 @@ onMounted(async () => {
     const response = await resultApi.getResult(evaluationId.value)
     result.value = response.data
     
-    // Fetch attachments
+    // Fetch attachments using the per-evaluation endpoint (available to all authenticated users)
     try {
-      const attRes = await apiClient.get('/teaching-office/attachments', { 
-        params: { indicator: 'evaluation_team_file', evaluation_year: response.data.evaluation_year } 
-      })
-      // The attachments response doesn't filter perfectly by evaluation unless we provide the teaching_office_id, or we just filter locally
-      attachments.value = attRes.data.filter((a: any) => a.evaluation_id === evaluationId.value)
+      const attRes = await apiClient.get(`/teaching-office/attachments/${evaluationId.value}`)
+      attachments.value = attRes.data || []
     } catch(e) {
       console.error('Failed to load attachments', e)
     }
