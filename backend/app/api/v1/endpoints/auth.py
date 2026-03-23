@@ -94,6 +94,7 @@ def login(
         token=access_token,
         userId=str(user.id),
         role=user.role,
+        name=user.name,
         teachingOfficeId=teaching_office_id,
         expiresIn=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60
     )

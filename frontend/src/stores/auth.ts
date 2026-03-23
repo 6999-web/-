@@ -45,20 +45,20 @@ export const useAuthStore = defineStore('auth', {
       localStorage.setItem('userRole', role)
     },
     
-    setAuth(data: { token: string; user: any }) {
+    setAuth(data: { token: string; userId: string; role: string; name: string; teachingOfficeId?: string }) {
       this.token = data.token
-      this.userId = data.user.id
-      this.userName = data.user.name
-      this.userRole = data.user.role
-      this.teachingOfficeId = data.user.teaching_office_id || ''
+      this.userId = data.userId
+      this.userName = data.name
+      this.userRole = data.role
+      this.teachingOfficeId = data.teachingOfficeId || ''
       
       // 保存到localStorage
       localStorage.setItem('token', data.token)
-      localStorage.setItem('userId', data.user.id)
-      localStorage.setItem('userName', data.user.name)
-      localStorage.setItem('userRole', data.user.role)
-      if (data.user.teaching_office_id) {
-        localStorage.setItem('teachingOfficeId', data.user.teaching_office_id)
+      localStorage.setItem('userId', data.userId)
+      localStorage.setItem('userName', data.name)
+      localStorage.setItem('userRole', data.role)
+      if (data.teachingOfficeId) {
+        localStorage.setItem('teachingOfficeId', data.teachingOfficeId)
       }
     },
     

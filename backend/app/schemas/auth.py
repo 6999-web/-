@@ -12,6 +12,7 @@ class LoginResponse(BaseModel):
     token: str
     userId: str
     role: str
+    name: str
     expiresIn: int
     teachingOfficeId: str | None = None
 
